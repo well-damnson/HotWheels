@@ -6,12 +6,9 @@ import {
   TouchableOpacity,
   StatusBar,
 } from 'react-native';
-import DBfunction from './DatabaseSandbox';
 export default function App() {
   let number = 0;
   console.log('Development Mode: ' + __DEV__);
-  if (__DEV__ === true) DBfunction.findAll();
-  if (__DEV__ === true) DBfunction.countAll();
   return (
     <View style={styles.container}>
       <StatusBar hidden={true} />
@@ -19,7 +16,6 @@ export default function App() {
       <TouchableOpacity
         onPress={() => {
           console.log(number++);
-          DBfunction.add(number);
         }}
       >
         <Text>new data</Text>
