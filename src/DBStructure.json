@@ -1,0 +1,14 @@
+[
+  {
+    "no": "number",
+    "brand": "string",
+    "merk": "string",
+    "type": "string",
+    "series": "string",
+    "name": "string",
+    "color": "string",
+    "notes": "string",
+    "created_at": "date",
+    "updated_at": "date"
+  }
+]

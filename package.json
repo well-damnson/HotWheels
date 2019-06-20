@@ -5,14 +5,17 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "optimize": "expo optimize"
   },
   "dependencies": {
     "expo": "^33.0.0",
     "react": "16.8.3",
     "react-dom": "^16.8.6",
     "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
-    "react-native-web": "^0.11.4"
+    "react-native-local-mongodb": "^2.2.9",
+    "react-native-web": "^0.11.4",
+    "validate.js": "^0.13.1"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.1.1",
@@ -22,7 +25,8 @@
     "bracketSpacing": false,
     "singleQuote": true,
     "trailingComma": "all",
-    "arrowParens": "always"
+    "arrowParens": "always",
+    "eslintIntegration": true
   },
   "private": true
 }
