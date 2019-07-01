@@ -1,7 +1,6 @@
 import {Google} from 'expo';
-import Constant from './Constant';
-import DBFunc from './DatabaseFunction';
-
+import Constant from '../config/Constant';
+import DBFunc from '../database/DatabaseFunction';
 
 async function signIn() {
   let user = await DBFunc.userData();

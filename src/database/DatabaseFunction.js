@@ -1,6 +1,6 @@
 import Database from './Database';
 import {validate} from 'validate.js';
-import Constraint from './Constraint';
+import Constraint from '../config/Constraint';
 
 /*
  * obj = {brand, merk, type, series, name, color, notes}
@@ -32,7 +32,7 @@ let addData = async (obj) => {
 /*
  * obj = {sort: {by:['brand', 'merk', 'type', 'series', 'name', 'color', 'notes'], asc: boolean}, search: string, filter: [{by: ['brand', 'merk', 'type', 'series', 'name', 'color', 'notes'], value: string}]}
  */
-let find = async (obj) => {
+let find = async (obj = {}) => {
   let validation = validate(obj, Constraint.searchItemConstraint);
   if (validation !== undefined) {
     return validation;
@@ -40,8 +40,10 @@ let find = async (obj) => {
   let data = [];
   await Database.db.find({}, (err, docs) => {
     let filteredData = [...docs];
-    for (let i = 0; i < obj.filter.length; i++) {
-      filteredData = _filter(filteredData, obj.filter[i]);
+    if (obj.filter) {
+      for (let i = 0; i < obj.filter.length; i++) {
+        filteredData = _filter(filteredData, obj.filter[i]);
+      }
     }
     data = [...filteredData];
   });

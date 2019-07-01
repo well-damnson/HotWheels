@@ -7,11 +7,12 @@ import {
   StatusBar,
 } from 'react-native';
 
-import GoogleService from '../GoogleService';
+import GoogleService from '../google/GoogleService';
+import GoogleDriveService from '../google/GoogleDriveService';
 
 export default class SamplePage extends Component {
   async componentDidMount() {
-    //await GoogleService.configuration();
+    // GoogleDriveService.init();
   }
   render() {
     return (
@@ -22,11 +23,28 @@ export default class SamplePage extends Component {
         </TouchableOpacity>
         <Text />
         <Text />
-        <Text />
-        <Text />
-        <Text />
         <TouchableOpacity onPress={() => GoogleService.signOut()}>
           <Text>With Google Logout Test Too</Text>
+        </TouchableOpacity>
+        <Text />
+        <Text />
+        <TouchableOpacity onPress={() => GoogleDriveService.init()}>
+          <Text>With Google Drive Test Too, Again?</Text>
+        </TouchableOpacity>
+        <Text />
+        <Text />
+        <TouchableOpacity onPress={() => GoogleDriveService.downloadBackup()}>
+          <Text>Download</Text>
+        </TouchableOpacity>
+        <Text />
+        <Text />
+        <TouchableOpacity onPress={() => GoogleDriveService.uploadBackup()}>
+          <Text>Upload</Text>
+        </TouchableOpacity>
+        <Text />
+        <Text />
+        <TouchableOpacity onPress={() => GoogleDriveService.checkfile()}>
+          <Text>Check File</Text>
         </TouchableOpacity>
       </View>
     );

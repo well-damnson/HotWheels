@@ -1,4 +1,4 @@
-import {debug} from './Constant';
+import {debug} from '../config/Constant';
 import Datastore from 'react-native-local-mongodb';
 
 let db = new Datastore({filename: 'CollectionSaveData', autoload: true});
