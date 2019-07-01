@@ -9,6 +9,7 @@
     "optimize": "expo optimize"
   },
   "dependencies": {
+    "@expo/vector-icons": "^10.0.2",
     "expo": "^33.0.0",
     "firebase": "^6.2.3",
     "react": "16.8.3",

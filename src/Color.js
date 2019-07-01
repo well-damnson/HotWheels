@@ -4,3 +4,5 @@ let Color = {
   sub: '#2a6171',
   accent: '#f3d516',
 };
+
+export default Color;
