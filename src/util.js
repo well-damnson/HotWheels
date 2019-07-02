@@ -5,12 +5,12 @@ import {debug} from './Constant';
  *
  * @param {*} any
  */
-function log(...any) {
+function _log(...any) {
   if (debug) {
     console.log(any);
   }
 }
 
 export default {
-  log,
+  log: _log,
 };

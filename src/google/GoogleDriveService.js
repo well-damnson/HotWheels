@@ -1,20 +1,30 @@
 import DBFunc from '../database/DatabaseFunction';
 import GDrive from './GDrive';
-
+import GoogleService from './GoogleService';
 let fileName = 'DieCastCollectors.backup.json';
 
+let initialized = false;
+
 let init = async () => {
-  let user = await DBFunc.userData();
-  if (user) {
-    GDrive.setAccessToken(user.data.accessToken);
-    GDrive.init();
-    if (GDrive.isInitialized()) {
-      console.log(true);
+  console.log('Initializing Google Drive');
+  if (await GoogleService.checkToken()) {
+    let user = await DBFunc.userData();
+    if (user) {
+      GDrive.setAccessToken(user.data.accessToken);
+      GDrive.init();
+      if (GDrive.isInitialized()) {
+        console.log('Google Drive Initialized');
+        initialized = true;
+      } else {
+        initialized = false;
+      }
     } else {
-      console.log(false);
+      alert('You Are Not Logged in');
+      initialized = false;
     }
   } else {
-    alert('You Are Not Logged in');
+    await GoogleService.signOut();
+    await GoogleService.signIn();
   }
 };
 
@@ -31,11 +41,15 @@ let _upload = async (content) => {
 };
 
 let checkfile = async () => {
-  let data = await (await GDrive.files.list({
-    q: "'root' in parents",
-  })).json();
-  console.log(data);
-  return data.files;
+  if (initialized) {
+    let data = await (await GDrive.files.list({
+      q: "'root' in parents",
+    })).json();
+    return data.files;
+  } else {
+    await init();
+    await checkfile();
+  }
 };
 
 let _deleteAllData = async () => {
@@ -46,19 +60,33 @@ let _deleteAllData = async () => {
 };
 
 let uploadBackup = async () => {
-  let content = await DBFunc.find();
-  await _deleteAllData();
-  await _upload(content);
+  if (initialized) {
+    let content = await DBFunc.find();
+    await _deleteAllData();
+    await _upload(content);
+  } else {
+    await init();
+    await uploadBackup();
+  }
 };
 
 let downloadBackup = async () => {
-  let files = await checkfile();
-  console.log(files);
-  if (files.length > 0) {
-    let data = await GDrive.files.download(files[0].id);
-    console.log(data);
+  if (initialized) {
+    let files = await checkfile();
+    if (files.length > 0) {
+      let data = await GDrive.files.download(files[0].id);
+      await DBFunc.remove();
+      for (let index = 0; index < data.length; index++) {
+        const {data: element} = data[index];
+        await DBFunc.addData(element);
+      }
+      console.log('Download Backup Completed');
+    } else {
+      alert('No Backup File Found');
+    }
   } else {
-    alert('No Backup File Found');
+    await init();
+    await downloadBackup();
   }
 };
 

@@ -2,6 +2,26 @@ import {Google} from 'expo';
 import Constant from '../config/Constant';
 import DBFunc from '../database/DatabaseFunction';
 
+async function checkToken() {
+  let user = await DBFunc.userData();
+  if (user) {
+    let {accessToken} = user.data;
+    let userInfoResponse = await (await fetch(
+      'https://www.googleapis.com/userinfo/v2/me',
+      {
+        headers: {Authorization: `Bearer ${accessToken}`},
+      },
+    )).json();
+    if (userInfoResponse.error) {
+      await DBFunc.userLogout();
+      return false;
+    }
+    return true;
+  } else {
+    return false;
+  }
+}
+
 async function signIn() {
   let user = await DBFunc.userData();
   if (user) {
@@ -47,4 +67,5 @@ async function signOut() {
 export default {
   signIn,
   signOut,
+  checkToken,
 };

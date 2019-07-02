@@ -74,27 +74,50 @@ let filterList = async () => {
     merk: [],
     type: [],
     series: [],
-    name: [],
-    color: [],
-    notes: [],
   };
-  await Database.db.find({}, (err, docs) => {
-    for (let i = 0; i < docs.length; i++) {
-      if (!columnList.brand.contains(docs[i].brand)) {
-        columnList.brand.push(docs[i].brand);
-      }
-      if (!columnList.merk.contains(docs[i].merk)) {
-        columnList.merk.push(docs[i].merk);
-      }
-      if (!columnList.type.contains(docs[i].type)) {
-        columnList.type.push(docs[i].type);
-      }
-      if (!columnList.series.contains(docs[i].series)) {
-        columnList.series.push(docs[i].series);
-      }
-    }
-  });
 
+  let find = () => {
+    return new Promise((resolve, reject) => {
+      Database.db.find({}, (err, docs) => {
+        if (err) reject(err);
+        resolve(docs);
+      });
+    });
+  };
+  let docs = await find();
+  for (let i = 0; i < docs.length; i++) {
+    if (!columnList.brand.includes(docs[i].data.brand)) {
+      columnList.brand.push(docs[i].data.brand);
+    }
+    if (!columnList.merk.includes(docs[i].data.merk)) {
+      columnList.merk.push(docs[i].data.merk);
+    }
+    if (!columnList.type.includes(docs[i].data.type)) {
+      columnList.type.push(docs[i].data.type);
+    }
+    if (!columnList.series.includes(docs[i].data.series)) {
+      columnList.series.push(docs[i].data.series);
+    }
+  }
+
+  // await Database.db.find({}, (err, docs) => {
+  //   console.log(docs.length);
+  //   for (let i = 0; i < docs.length; i++) {
+  //     if (!columnList.brand.includes(docs[i].data.brand)) {
+  //       columnList.brand.push(docs[i].data.brand);
+  //     }
+  //     if (!columnList.merk.includes(docs[i].data.merk)) {
+  //       columnList.merk.push(docs[i].data.merk);
+  //     }
+  //     if (!columnList.type.includes(docs[i].data.type)) {
+  //       columnList.type.push(docs[i].data.type);
+  //     }
+  //     if (!columnList.series.includes(docs[i].data.series)) {
+  //       columnList.series.push(docs[i].data.series);
+  //     }
+  //   }
+  //   console.log('Column List: ', columnList);
+  // });
   return columnList;
 };
 
@@ -108,12 +131,14 @@ let edit = async (_id, newData) => {
     let data = {...docs, ...newData, updated_at: Date.now()};
 
     await Database.db.update({_id}, {$set: {...data}});
+    console.log('Data Edited');
   });
 };
 
 let remove = async (_id) => {
   let data = _id ? {_id} : {};
   await Database.db.remove(data);
+  console.log('Data Removed');
 };
 
 let userLogin = async (sign) => {
@@ -126,6 +151,7 @@ let userLogin = async (sign) => {
   };
   await Database.userDB.insert({data}, (err, newDoc) => {
     if (err) throw err;
+    console.log('Data Inserted');
   });
 };
 

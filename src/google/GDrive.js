@@ -53,7 +53,6 @@ class Permissions {
 // import RNFS from "react-native-fs";
 import utf8 from 'utf8';
 import {StaticUtils, ArrayStringifier} from 'simple-common-utils';
-import downloadFile from './Downloader';
 const uploadUrl = 'https://www.googleapis.com/upload/drive/v3/files';
 
 function _stringifyQueryParams(
@@ -202,6 +201,33 @@ class Files {
     );
 
     console.log('downloadOption: ', downloadFileOptions);
+    let downloadFile = (options) => {
+      if (typeof options !== 'object')
+        throw new Error('downloadFile: Invalid value for argument `options`');
+      if (typeof options.fromUrl !== 'string')
+        throw new Error('downloadFile: Invalid value for property `fromUrl`');
+      if (options.headers && typeof options.headers !== 'object')
+        throw new Error('downloadFile: Invalid value for property `headers`');
+
+      var bridgeOptions = {
+        fromUrl: options.fromUrl,
+        headers: options.headers || {},
+      };
+
+      return _Fetch(bridgeOptions)
+        .then((res) => {
+          return res.json();
+        })
+        .catch((e) => {
+          return Promise.reject(e);
+        });
+    };
+
+    let _Fetch = (object) => {
+      let {headers} = object;
+      return fetch(object.fromUrl, {headers});
+    };
+
     return downloadFile(downloadFileOptions);
   }
 

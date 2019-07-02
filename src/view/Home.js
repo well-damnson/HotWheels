@@ -9,8 +9,24 @@ import {
 } from 'react-native';
 import Color from '../Color';
 
+import DBFunc from '../database/DatabaseFunction';
 export default class Homepage extends Component {
-  state = {Brand: '-', Manufacture: '-', Type: '-', Series: '-'};
+  state = {
+    Brand: '-',
+    Manufacture: '-',
+    Type: '-',
+    Series: '-',
+    Data: {
+      brand: [],
+      merk: [],
+      type: [],
+      series: [],
+    },
+  };
+  async componentDidMount() {
+    let Data = await DBFunc.filterList();
+    this.setState({Data});
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -36,9 +52,12 @@ export default class Homepage extends Component {
                   this.setState({Brand: itemValue})
                 }
               >
-                <Picker.Item label="All" value="-" />
-                <Picker.Item label="Hotwheels" value="hotwheels" />
-                <Picker.Item label="Mattel" value="mattel" />
+                <Picker.Item label="All" value={undefined} />
+                {this.state.Data &&
+                  this.state.Data.brand &&
+                  this.state.Data.brand.map((val, index) => {
+                    return <Picker.Item label={val} value={val} key={index} />;
+                  })}
               </Picker>
             </View>
           </View>
@@ -56,9 +75,12 @@ export default class Homepage extends Component {
                   this.setState({Manufacture: itemValue})
                 }
               >
-                <Picker.Item label="All" value="-" />
-                <Picker.Item label="Aston Martin" value="aston martin" />
-                <Picker.Item label="BMW" value="bmw" />
+                <Picker.Item label="All" value={undefined} />
+                {this.state.Data &&
+                  this.state.Data.merk &&
+                  this.state.Data.merk.map((val, index) => {
+                    return <Picker.Item label={val} value={val} key={index} />;
+                  })}
               </Picker>
             </View>
           </View>
@@ -76,9 +98,12 @@ export default class Homepage extends Component {
                   this.setState({Type: itemValue})
                 }
               >
-                <Picker.Item label="All" value="-" />
-                <Picker.Item label="Car" value="car" />
-                <Picker.Item label="Planes" value="planes" />
+                <Picker.Item label="All" value={undefined} />
+                {this.state.Data &&
+                  this.state.Data.type &&
+                  this.state.Data.type.map((val, index) => {
+                    return <Picker.Item label={val} value={val} key={index} />;
+                  })}
               </Picker>
             </View>
           </View>
@@ -96,9 +121,12 @@ export default class Homepage extends Component {
                   this.setState({Series: itemValue})
                 }
               >
-                <Picker.Item label="All" value="-" />
-                <Picker.Item label="None" value="none" />
-                <Picker.Item label="Fast&Furious" value="fnf" />
+                <Picker.Item label="All" value={undefined} />
+                {this.state.Data &&
+                  this.state.Data.series &&
+                  this.state.Data.series.map((val, index) => {
+                    return <Picker.Item label={val} value={val} key={index} />;
+                  })}
               </Picker>
             </View>
           </View>

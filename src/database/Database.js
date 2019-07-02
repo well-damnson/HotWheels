@@ -6,8 +6,6 @@ let userDB = new Datastore({filename: 'userData', autoload: true});
 let Database = {
   db,
   userDB,
-  uploadToGDrive: () => {},
-  downloadFromGDrive: () => {},
 };
 
 export default Database;
