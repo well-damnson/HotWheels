@@ -47,6 +47,7 @@ let find = async (obj = {}) => {
     }
     data = [...filteredData];
   });
+  console.log('Data Found: ', data.length);
   return data;
   //==============Filtering Sequence===================
 };
@@ -137,7 +138,7 @@ let edit = async (_id, newData) => {
 
 let remove = async (_id) => {
   let data = _id ? {_id} : {};
-  await Database.db.remove(data);
+  await Database.db.remove(data, {multi: true});
   console.log('Data Removed');
 };
 
@@ -156,7 +157,7 @@ let userLogin = async (sign) => {
 };
 
 let userLogout = async () => {
-  await Database.userDB.remove({});
+  await Database.userDB.remove({}, {multi: true});
 };
 
 let userData = async () => {
