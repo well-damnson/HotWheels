@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StatusBar,
 } from 'react-native';
+import Modal from 'react-native-modal';
 
 export default class SamplePage extends Component {
   render() {

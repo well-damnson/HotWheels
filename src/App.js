@@ -58,9 +58,6 @@ const HomeStack = createStackNavigator({
   SamplePage: {
     screen: Screen.SamplePage,
   },
-  ModalTest: {
-    screen: Screen.Modular,
-  },
   NotSample: {
     screen: Screen.NotSample,
   },
@@ -74,8 +71,18 @@ const SandStack = createStackNavigator({
   SamplePage: {
     screen: Screen.SamplePage,
   },
-  ModalTest: {
-    screen: Screen.Modular,
+  NotSample: {
+    screen: Screen.NotSample,
+  },
+  DevPage: {screen: App},
+});
+
+const AddStack = createStackNavigator({
+  AddEntry: {
+    screen: Screen.AddEntry,
+  },
+  SamplePage: {
+    screen: Screen.SamplePage,
   },
   NotSample: {
     screen: Screen.NotSample,
@@ -83,31 +90,32 @@ const SandStack = createStackNavigator({
   DevPage: {screen: App},
 });
 
-const getTabBarIcon = (navigation, focused, tintColor) => {
+const getTabBarIcon = (navigation, tintColor) => {
   const {routeName} = navigation.state;
-  let IconComponent = Ionicons;
+  let IconComponent = MaterialCommunityIcons;
   let iconName;
   if (routeName === 'Home') {
     // iconName = `ios-information-circle${focused ? '' : '-outline'}`;
-    iconName = `ios-information-circle`;
+    iconName = `buffer`;
   } else if (routeName === 'SandBox') {
-    iconName = `ios-options${focused ? '' : '-outline'}`;
+    iconName = `buffer${focused ? '' : ''}`;
+  } else if (routeName === 'Add') {
+    iconName = `buffer${focused ? '' : ''}`;
   }
-  return <IconComponent name={iconName} size={25} color={tintColor} />;
+  return <IconComponent name={iconName} size={10} color={tintColor} />;
 };
 
 export default createAppContainer(
   createBottomTabNavigator({
     Home: {screen: HomeStack},
     SandBox: {screen: SandStack},
+    Add: {screen: AddStack},
   }),
   {
     defaultNavigationOptions: ({navigation}) => ({
-      tabBarIcon: ({focused, tintColor}) =>
-        getTabBarIcon(navigation, focused, tintColor),
+      tabBarIcon: ({tintColor}) => getTabBarIcon(navigation, tintColor),
     }),
     tabBarOptions: {
-      showIcon: true,
       activeTintColor: Color.accent,
       inactiveTintColor: Color.sub,
     },

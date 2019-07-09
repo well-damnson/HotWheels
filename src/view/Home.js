@@ -42,7 +42,7 @@ export default class Homepage extends Component {
           <View style={styles.flexbutrow}>
             <View style={styles.thespacer}>
               <Text style={styles.defaulter}>Brand </Text>
-              <Text style={{fontSize: 25}}>:</Text>
+              <Text style={styles.defaulter}>:</Text>
             </View>
             <View style={styles.pickapsulated}>
               <Picker
@@ -65,7 +65,7 @@ export default class Homepage extends Component {
           <View style={styles.flexbutrow}>
             <View style={styles.thespacer}>
               <Text style={styles.defaulter}>Manufacture </Text>
-              <Text style={{fontSize: 25}}>:</Text>
+              <Text style={styles.defaulter}>:</Text>
             </View>
             <View style={styles.pickapsulated}>
               <Picker
@@ -88,7 +88,7 @@ export default class Homepage extends Component {
           <View style={styles.flexbutrow}>
             <View style={styles.thespacer}>
               <Text style={styles.defaulter}>Type </Text>
-              <Text style={{fontSize: 25}}>:</Text>
+              <Text style={styles.defaulter}>:</Text>
             </View>
             <View style={styles.pickapsulated}>
               <Picker
@@ -111,7 +111,7 @@ export default class Homepage extends Component {
           <View style={styles.flexbutrow}>
             <View style={styles.thespacer}>
               <Text style={styles.defaulter}>Series </Text>
-              <Text style={{fontSize: 25}}>:</Text>
+              <Text style={styles.defaulter}>:</Text>
             </View>
             <View style={styles.pickapsulated}>
               <Picker
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
   },
   flexbutrow: {
     flex: 1,
-    padding: 25,
+    padding: 15,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -195,12 +195,12 @@ const styles = StyleSheet.create({
   // if center fails use this style👇
   centerizer: {
     alignSelf: 'center',
-    fontSize: 25,
+    fontSize: 30,
   },
   //for default text preset👇
   defaulter: {
-    flex: 1,
-    fontSize: 25,
+    // flex: 1,
+    fontSize: 20,
   },
   pickapsulated: {
     flex: 1,
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
   },
   picker: {
     flex: 1,
-    fontSize: 25,
+    fontSize: 20,
     // backgroundColor: Color.main,
     borderRadius: 5,
     // marginHorizontal: 5,
