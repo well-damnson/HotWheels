@@ -24,11 +24,13 @@ export default class AddEntry extends Component {
     series: [],
     name: [],
     color: [],
+    column: 'name',
   };
 
   async componentDidMount() {
     let Data = await this.fetchData();
-    this.setState({Data});
+    this.setState({...Data});
+
     WDSTools.EE.on('refreshData', this.fetchData);
   }
   componentWillUnmount() {
@@ -40,11 +42,13 @@ export default class AddEntry extends Component {
   toggleModalConfirm = () => {
     this.setState({isModalConfirmVisible: !this.state.isModalConfirmVisible});
   };
-  toggleModalList = () => {
-    this.setState({isModalListVisible: !this.state.isModalListVisible});
+  toggleModalList = (column) => {
+    this.setState({isModalListVisible: !this.state.isModalListVisible, column});
   };
 
   render() {
+    console.log(this.state);
+    console.log(this.state[this.state.column]);
     return (
       <View style={styles.container}>
         {/* Modal Start */}
@@ -109,7 +113,7 @@ export default class AddEntry extends Component {
           <View style={styles.ModalContainer}>
             <View style={{flex: 2}} />
             <ScrollView>
-              {this.state.name.map((item, index) => (
+              {this.state[this.state.column].map((item, index) => (
                 <View key={index} style={styles.item}>
                   <Text>{item}</Text>
                 </View>
@@ -129,7 +133,7 @@ export default class AddEntry extends Component {
             <TouchableOpacity
               style={styles.button2}
               onPress={() => {
-                this.toggleModalList();
+                this.toggleModalList('name');
               }}
             >
               <Ionicons name={'md-search'} size={15} color="blue" />
@@ -147,7 +151,7 @@ export default class AddEntry extends Component {
             <TouchableOpacity
               style={styles.button2}
               onPress={() => {
-                this.toggleModalList();
+                this.toggleModalList('brand');
               }}
             >
               <Ionicons name={'md-search'} size={15} color="blue" />
@@ -165,7 +169,7 @@ export default class AddEntry extends Component {
             <TouchableOpacity
               style={styles.button2}
               onPress={() => {
-                this.toggleModalList();
+                this.toggleModalList('merk');
               }}
             >
               <Ionicons name={'md-search'} size={15} color="blue" />
@@ -183,7 +187,7 @@ export default class AddEntry extends Component {
             <TouchableOpacity
               style={styles.button2}
               onPress={() => {
-                this.toggleModalList();
+                this.toggleModalList('type');
               }}
             >
               <Ionicons name={'md-search'} size={15} color="blue" />
@@ -201,7 +205,7 @@ export default class AddEntry extends Component {
             <TouchableOpacity
               style={styles.button2}
               onPress={() => {
-                this.toggleModalList();
+                this.toggleModalList('color');
               }}
             >
               <Ionicons name={'md-search'} size={15} color="blue" />
@@ -219,7 +223,7 @@ export default class AddEntry extends Component {
             <TouchableOpacity
               style={styles.button2}
               onPress={() => {
-                this.toggleModalList();
+                this.toggleModalList('series');
               }}
             >
               <Ionicons name={'md-search'} size={15} color="blue" />
