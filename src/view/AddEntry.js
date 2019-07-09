@@ -48,6 +48,7 @@ export default class AddEntry extends Component {
 
   render() {
     console.log(this.state);
+    console.log(this.state.column);
     console.log(this.state[this.state.column]);
     return (
       <View style={styles.container}>
@@ -102,10 +103,10 @@ export default class AddEntry extends Component {
         <Modal
           isVisible={this.state.isModalListVisible}
           onBackdropPress={() => {
-            this.toggleModalList();
+            this.toggleModalList(this.state.column);
           }}
           onBackButtonPress={() => {
-            this.toggleModalList();
+            this.toggleModalList(this.state.column);
           }}
           animationIn={'zoomIn'}
           animationOut={'zoomOut'}
