@@ -71,43 +71,43 @@ export default class Sandboxui extends Component {
           <View style={styles.Cardslave}>
             <View style={styles.flexbutrow}>
               <Text style={styles.defaulter}>Name:</Text>
-              <Text style={styles.defaulter}>Name Placeholder</Text>
+              <Text style={styles.defaulter2}>Name Placeholder</Text>
             </View>
           </View>
           <View style={styles.Cardslave}>
             <View style={styles.flexbutrow}>
               <Text style={styles.defaulter}>Brand:</Text>
-              <Text style={styles.defaulter}>Brand Placeholder</Text>
+              <Text style={styles.defaulter2}>Brand Placeholder</Text>
             </View>
           </View>
           <View style={styles.Cardslave}>
             <View style={styles.flexbutrow}>
               <Text style={styles.defaulter}>Manufacture:</Text>
-              <Text style={styles.defaulter}>Manufacture Placeholder</Text>
+              <Text style={styles.defaulter2}>Manufacture Placeholder</Text>
             </View>
           </View>
           <View style={styles.Cardslave}>
             <View style={styles.flexbutrow}>
               <Text style={styles.defaulter}>Type:</Text>
-              <Text style={styles.defaulter}>Type Placeholder</Text>
+              <Text style={styles.defaulter2}>Type Placeholder</Text>
             </View>
           </View>
           <View style={styles.Cardslave}>
             <View style={styles.flexbutrow}>
               <Text style={styles.defaulter}>Color:</Text>
-              <Text style={styles.defaulter}>Color Placeholder</Text>
+              <Text style={styles.defaulter2}>Color Placeholder</Text>
             </View>
           </View>
           <View style={styles.Cardslave}>
             <View style={styles.flexbutrow}>
               <Text style={styles.defaulter}>Series:</Text>
-              <Text style={styles.defaulter}>Series Placeholder</Text>
+              <Text style={styles.defaulter2}>Series Placeholder</Text>
             </View>
           </View>
           <View style={[styles.Cardslave2, {flex: 2}]}>
             <View style={styles.flexbutrow2}>
               <Text style={styles.defaulter}>Notes:</Text>
-              <Text style={styles.defaulter}>
+              <Text style={styles.defaulter2}>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua.
               </Text>
@@ -227,6 +227,10 @@ const styles = StyleSheet.create({
   //for default text preset👇
   defaulter: {
     flex: 1,
+    fontSize: 15,
+  },
+  defaulter2: {
+    flex: 2,
     fontSize: 15,
   },
   //for (:) spacer👇
