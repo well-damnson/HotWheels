@@ -26,27 +26,38 @@ let addData = async (obj) => {
   };
   await Database.db.insert({data}, (err, newDoc) => {
     if (err) throw err;
+    console.log('Data Added');
+    refreshData();
   });
 };
 
+let _f = () => {
+  return new Promise((resolve, reject) => {
+    Database.db.find({}, (err, docs) => {
+      if (err) reject(err);
+      resolve(docs);
+    });
+  });
+};
 /*
- * obj = {sort: {by:['brand', 'merk', 'type', 'series', 'name', 'color', 'notes'], asc: boolean}, search: string, filter: [{by: ['brand', 'merk', 'type', 'series', 'name', 'color', 'notes'], value: string}]}
+ * obj = {filter: [{by: ['brand', 'merk', 'type', 'series', 'name', 'color', 'notes'], value: string}]}
  */
 let find = async (obj = {}) => {
   let validation = validate(obj, Constraint.searchItemConstraint);
   if (validation !== undefined) {
     return validation;
   }
+
   let data = [];
-  await Database.db.find({}, (err, docs) => {
-    let filteredData = [...docs];
-    if (obj.filter) {
-      for (let i = 0; i < obj.filter.length; i++) {
-        filteredData = _filter(filteredData, obj.filter[i]);
-      }
+
+  let filteredData = [...(await _f())];
+  if (obj.filter) {
+    for (let i = 0; i < obj.filter.length; i++) {
+      filteredData = _filter(filteredData, obj.filter[i]);
     }
-    data = [...filteredData];
-  });
+  }
+  data = [...filteredData];
+
   console.log('Data Found: ', data.length);
   return data;
   //==============Filtering Sequence===================
@@ -54,11 +65,16 @@ let find = async (obj = {}) => {
 
 let _filter = (data, filter) => {
   let filteredData = [];
-  if (filter !== undefined) {
+  if (
+    filter !== undefined &&
+    filter.value !== undefined &&
+    filter.value.length !== 0
+  ) {
     let {by, value} = filter;
     for (let i = 0; i < data.length; i++) {
-      if (data[i][by] === value) {
-        filteredData.push({...data[i]});
+      let element = data[i];
+      if (element.data[by] === value) {
+        filteredData.push({...element});
       }
     }
   } else {
@@ -77,15 +93,7 @@ let filterList = async () => {
     series: [],
   };
 
-  let find = () => {
-    return new Promise((resolve, reject) => {
-      Database.db.find({}, (err, docs) => {
-        if (err) reject(err);
-        resolve(docs);
-      });
-    });
-  };
-  let docs = await find();
+  let docs = await _f();
   for (let i = 0; i < docs.length; i++) {
     if (!columnList.brand.includes(docs[i].data.brand)) {
       columnList.brand.push(docs[i].data.brand);
@@ -101,24 +109,6 @@ let filterList = async () => {
     }
   }
 
-  // await Database.db.find({}, (err, docs) => {
-  //   console.log(docs.length);
-  //   for (let i = 0; i < docs.length; i++) {
-  //     if (!columnList.brand.includes(docs[i].data.brand)) {
-  //       columnList.brand.push(docs[i].data.brand);
-  //     }
-  //     if (!columnList.merk.includes(docs[i].data.merk)) {
-  //       columnList.merk.push(docs[i].data.merk);
-  //     }
-  //     if (!columnList.type.includes(docs[i].data.type)) {
-  //       columnList.type.push(docs[i].data.type);
-  //     }
-  //     if (!columnList.series.includes(docs[i].data.series)) {
-  //       columnList.series.push(docs[i].data.series);
-  //     }
-  //   }
-  //   console.log('Column List: ', columnList);
-  // });
   return columnList;
 };
 
@@ -128,18 +118,29 @@ let edit = async (_id, newData) => {
     return validation;
   }
 
-  await Database.db.find({_id}, async (err, docs) => {
-    let data = {...docs, ...newData, updated_at: Date.now()};
+  // await Database.db.find({_id}, async (err, docs) => {
+  //   let data = {...docs, ...newData, updated_at: Date.now()};
 
-    await Database.db.update({_id}, {$set: {...data}});
-    console.log('Data Edited');
-  });
+  //   await Database.db.update({_id}, {$set: {...data}});
+  //   console.log('Data Edited');
+  //   refreshData();
+  // });
+  let data = await _f();
+  for (let i = 0; i < data.length; i++) {
+    if (data[i]._id === _id) {
+      let pushData = {...data[i].data, ...newData, updated_at: Date.now()};
+      await Database.db.update({_id}, {$set: {...pushData}});
+      console.log('Data Edited');
+      refreshData();
+    }
+  }
 };
 
 let remove = async (_id) => {
   let data = _id ? {_id} : {};
   await Database.db.remove(data, {multi: true});
   console.log('Data Removed');
+  refreshData();
 };
 
 let userLogin = async (sign) => {
@@ -168,6 +169,10 @@ let userData = async () => {
   return data[0] !== undefined ? data[0] : undefined;
 };
 
+let refreshData = () => {
+  WDSTools.EE.emit('refreshData');
+};
+
 export default {
   addData,
   find,
@@ -177,4 +182,5 @@ export default {
   userLogin,
   userLogout,
   userData,
+  refreshData,
 };

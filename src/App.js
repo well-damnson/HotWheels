@@ -16,6 +16,7 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import Color from './Color';
+import WDSTools from './WDSTools';
 
 class App extends React.Component {
   componentDidMount() {

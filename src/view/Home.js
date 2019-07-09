@@ -8,10 +8,10 @@ import {
   Picker,
 } from 'react-native';
 import Color from '../Color';
-
 import DBFunc from '../database/DatabaseFunction';
 export default class Homepage extends Component {
   state = {
+    isSearching: false,
     Brand: '-',
     Manufacture: '-',
     Type: '-',
@@ -24,9 +24,17 @@ export default class Homepage extends Component {
     },
   };
   async componentDidMount() {
-    let Data = await DBFunc.filterList();
+    let Data = await this.fetchData();
+    // console.log(Object.getOwnPropertyNames(global));
     this.setState({Data});
+    WDSTools.EE.on('refreshData', this.fetchData);
   }
+  componentWillUnmount() {
+    WDSTools.EE.off('refreshData', this.fetchData);
+  }
+
+  fetchData = async () => await DBFunc.filterList();
+
   render() {
     return (
       <View style={styles.container}>
@@ -135,11 +143,24 @@ export default class Homepage extends Component {
             <View style={{flex: 1}} />
             <TouchableOpacity
               style={styles.button}
-              onPress={() => {
-                this.props.navigation.navigate('SamplePage');
+              onPress={async () => {
+                this.setState({isSearching: true});
+                let data = await DBFunc.find({
+                  filter: [
+                    {by: 'merk', value: this.state.Manufacture},
+                    {by: 'brand', value: this.state.Brand},
+                    {by: 'type', value: this.state.Type},
+                    {by: 'series', value: this.state.Series},
+                  ],
+                });
+                console.log(data.length);
+                this.setState({isSearching: false});
+                // TODO: NAVIGATE WITH PROPS
+                // this.props.navigation.navigate('SamplePage');
               }}
+              disabled={this.state.isSearching}
             >
-              <Text>Search</Text>
+              <Text>{this.state.isSearching === false?'Search':'Searching . . .'}</Text>
             </TouchableOpacity>
             <View style={{flex: 1}} />
             <TouchableOpacity
