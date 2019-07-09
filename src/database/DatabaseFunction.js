@@ -91,6 +91,8 @@ let filterList = async () => {
     merk: [],
     type: [],
     series: [],
+    name: [],
+    color: [],
   };
 
   let docs = await _f();
@@ -106,6 +108,12 @@ let filterList = async () => {
     }
     if (!columnList.series.includes(docs[i].data.series)) {
       columnList.series.push(docs[i].data.series);
+    }
+    if (!columnList.name.includes(docs[i].data.name)) {
+      columnList.name.push(docs[i].data.name);
+    }
+    if (!columnList.color.includes(docs[i].data.color)) {
+      columnList.color.push(docs[i].data.color);
     }
   }
 

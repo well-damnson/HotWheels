@@ -11,27 +11,31 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Color from '../Color';
 import Fsize from '../FontSize';
 import Modal from 'react-native-modal';
+import DBFunc from '../database/DatabaseFunction';
 
 export default class AddEntry extends Component {
   // state = {Brand: '-', Manufacture: '-', Type: '-', Series: '-'};
   state = {
     isModalConfirmVisible: false,
     isModalListVisible: false,
-    names: [
-      {name: 'Ben', id: 1},
-      {name: 'Susan', id: 2},
-      {name: 'Robert', id: 3},
-      {name: 'Mary', id: 4},
-      {name: 'Daniel', id: 5},
-      {name: 'Laura', id: 6},
-      {name: 'John', id: 7},
-      {name: 'Debra', id: 8},
-      {name: 'Aron', id: 9},
-      {name: 'Ann', id: 10},
-      {name: 'Steve', id: 11},
-      {name: 'Olivia', id: 12},
-    ],
+    brand: [],
+    merk: [],
+    type: [],
+    series: [],
+    name: [],
+    color: [],
   };
+
+  async componentDidMount() {
+    let Data = await this.fetchData();
+    this.setState({Data});
+    WDSTools.EE.on('refreshData', this.fetchData);
+  }
+  componentWillUnmount() {
+    WDSTools.EE.off('refreshData', this.fetchData);
+  }
+
+  fetchData = async () => await DBFunc.filterList();
 
   toggleModalConfirm = () => {
     this.setState({isModalConfirmVisible: !this.state.isModalConfirmVisible});
@@ -105,9 +109,9 @@ export default class AddEntry extends Component {
           <View style={styles.ModalContainer}>
             <View style={{flex: 2}} />
             <ScrollView>
-              {this.state.names.map((item, index) => (
-                <View key={item.id} style={styles.item}>
-                  <Text>{item.name}</Text>
+              {this.state.name.map((item, index) => (
+                <View key={index} style={styles.item}>
+                  <Text>{item}</Text>
                 </View>
               ))}
             </ScrollView>
