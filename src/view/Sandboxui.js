@@ -89,7 +89,7 @@ export default class Sandboxui extends Component {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              this.props.navigation.navigate('DevPage');
+              this.props.navigation.navigate('EditEntry', {item});
             }}
           >
             <Ionicons name={'md-create'} size={15} color="black">
