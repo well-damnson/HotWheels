@@ -124,7 +124,7 @@ let filterList = async () => {
 };
 
 let edit = async (_id, newData) => {
-  let validation = validate(newData, Constraint.searchItemConstraint);
+  let validation = validate(newData, Constraint.itemConstraint);
   if (validation !== undefined) {
     return validation;
   }
@@ -140,7 +140,7 @@ let edit = async (_id, newData) => {
   for (let i = 0; i < data.length; i++) {
     if (data[i]._id === _id) {
       let pushData = {...data[i].data, ...newData, updated_at: Date.now()};
-      await Database.db.update({_id}, {$set: {...pushData}});
+      await Database.db.update({_id}, {$set: {data: {...pushData}}});
       console.log('Data Edited');
       refreshData();
     }

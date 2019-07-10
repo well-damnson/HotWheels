@@ -18,10 +18,14 @@ export default class Sandboxui extends Component {
   state = {
     isModalVisible: false,
     Data: [],
+    selectedItemToRemove: {},
   };
 
-  toggleModal = () => {
-    this.setState({isModalVisible: !this.state.isModalVisible});
+  toggleModal = (itemToRemove) => {
+    this.setState({
+      isModalVisible: !this.state.isModalVisible,
+      selectedItemToRemove: itemToRemove || {},
+    });
   };
 
   async componentDidMount() {
@@ -89,7 +93,7 @@ export default class Sandboxui extends Component {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              this.props.navigation.navigate('EditEntry', {item});
+              this.props.navigation.navigate('EditEntry', item);
             }}
           >
             <Ionicons name={'md-create'} size={15} color="black">
@@ -100,7 +104,7 @@ export default class Sandboxui extends Component {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              this.toggleModal();
+              this.toggleModal(item);
             }}
           >
             <Ionicons name={'md-close-circle-outline'} size={15} color="tomato">
@@ -142,6 +146,7 @@ export default class Sandboxui extends Component {
                 <View style={{flex: 1}} />
                 <TouchableOpacity
                   onPress={() => {
+                    DBFunc.remove(this.state.selectedItemToRemove._id);
                     this.toggleModal();
                   }}
                   style={styles.button}

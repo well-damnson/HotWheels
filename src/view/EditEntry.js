@@ -24,29 +24,17 @@ export default class EditEntry extends Component {
     series: [],
     name: [],
     color: [],
-    txtbrand: '',
-    txtmerk: '',
-    txttype: '',
-    txtseries: '',
-    txtname: '',
-    txtcolor: '',
-    txtnotes: '',
+    txtbrand: this.props.navigation.getParam('data').brand || '',
+    txtmerk: this.props.navigation.getParam('data').merk || '',
+    txttype: this.props.navigation.getParam('data').type || '',
+    txtseries: this.props.navigation.getParam('data').series || '',
+    txtname: this.props.navigation.getParam('data').name || '',
+    txtcolor: this.props.navigation.getParam('data').color || '',
+    txtnotes: this.props.navigation.getParam('data').notes || '',
     column: 'name',
   };
 
-  async componentDidMount() {
-    await this.fetchData();
-
-    WDSTools.EE.on('refreshData', this.fetchData);
-  }
-  componentWillUnmount() {
-    WDSTools.EE.off('refreshData', this.fetchData);
-  }
-
-  fetchData = async () => {
-    let Data = await DBFunc.filterList();
-    this.setState({...Data});
-  };
+  async componentDidMount() {}
 
   toggleModalConfirm = () => {
     this.setState({isModalConfirmVisible: !this.state.isModalConfirmVisible});
@@ -288,15 +276,18 @@ export default class EditEntry extends Component {
           <TouchableOpacity
             style={styles.button}
             onPress={async () => {
-              let data = await DBFunc.addData({
-                name: this.state.txtname,
-                brand: this.state.txtbrand,
-                merk: this.state.txtmerk,
-                type: this.state.txttype,
-                series: this.state.txtseries,
-                color: this.state.txtcolor,
-                notes: this.state.txtnotes,
-              });
+              let data = await DBFunc.edit(
+                this.props.navigation.getParam('_id'),
+                {
+                  name: this.state.txtname,
+                  brand: this.state.txtbrand,
+                  merk: this.state.txtmerk,
+                  type: this.state.txttype,
+                  series: this.state.txtseries,
+                  color: this.state.txtcolor,
+                  notes: this.state.txtnotes,
+                },
+              );
               if (data !== undefined) {
                 let str = '';
                 str += data.brand ? data.brand[0] + '\n' : '';
@@ -305,6 +296,8 @@ export default class EditEntry extends Component {
                 str += data.type ? data.type[0] + '\n' : '';
                 str += data.color ? data.color[0] + '\n' : '';
                 alert(str);
+              } else {
+                this.props.navigation.goBack();
               }
               // this.props.navigation.navigate('NotSample');
             }}
@@ -317,7 +310,7 @@ export default class EditEntry extends Component {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              this.toggleModalConfirm();
+              this.props.navigation.goBack();
             }}
           >
             <Ionicons name={'md-close-circle-outline'} size={15} color="tomato">
