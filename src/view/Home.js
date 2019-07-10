@@ -24,16 +24,17 @@ export default class Homepage extends Component {
     },
   };
   async componentDidMount() {
-    let Data = await this.fetchData();
-    // console.log(Object.getOwnPropertyNames(global));
-    this.setState({Data});
+    await this.fetchData();
     WDSTools.EE.on('refreshData', this.fetchData);
   }
   componentWillUnmount() {
     WDSTools.EE.off('refreshData', this.fetchData);
   }
 
-  fetchData = async () => await DBFunc.filterList();
+  fetchData = async () => {
+    let Data = await DBFunc.filterList();
+    this.setState({Data});
+  };
 
   render() {
     return (
@@ -160,7 +161,11 @@ export default class Homepage extends Component {
               }}
               disabled={this.state.isSearching}
             >
-              <Text>{this.state.isSearching === false?'Search':'Searching . . .'}</Text>
+              <Text>
+                {this.state.isSearching === false
+                  ? 'Search'
+                  : 'Searching . . .'}
+              </Text>
             </TouchableOpacity>
             <View style={{flex: 1}} />
             <TouchableOpacity

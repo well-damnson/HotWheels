@@ -1,19 +1,39 @@
 let itemConstraint = {
   brand: {
     presence: true,
+    length: {
+      minimum: 1,
+      message: 'Brand cannot be blank',
+    },
   },
   merk: {
     presence: true,
+    length: {
+      minimum: 1,
+      message: 'Brand cannot be blank',
+    },
   },
   type: {
     presence: true,
+    length: {
+      minimum: 1,
+      message: 'Brand cannot be blank',
+    },
   },
   series: {},
   name: {
     presence: true,
+    length: {
+      minimum: 1,
+      message: 'Brand cannot be blank',
+    },
   },
   color: {
     presence: true,
+    length: {
+      minimum: 1,
+      message: 'Brand cannot be blank',
+    },
   },
   notes: {},
 };

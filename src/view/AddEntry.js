@@ -24,12 +24,18 @@ export default class AddEntry extends Component {
     series: [],
     name: [],
     color: [],
+    txtbrand: '',
+    txtmerk: '',
+    txttype: '',
+    txtseries: '',
+    txtname: '',
+    txtcolor: '',
+    txtnotes: '',
     column: 'name',
   };
 
   async componentDidMount() {
-    let Data = await this.fetchData();
-    this.setState({...Data});
+    await this.fetchData();
 
     WDSTools.EE.on('refreshData', this.fetchData);
   }
@@ -37,7 +43,10 @@ export default class AddEntry extends Component {
     WDSTools.EE.off('refreshData', this.fetchData);
   }
 
-  fetchData = async () => await DBFunc.filterList();
+  fetchData = async () => {
+    let Data = await DBFunc.filterList();
+    this.setState({...Data});
+  };
 
   toggleModalConfirm = () => {
     this.setState({isModalConfirmVisible: !this.state.isModalConfirmVisible});
@@ -76,6 +85,15 @@ export default class AddEntry extends Component {
                 <View style={{flex: 1}} />
                 <TouchableOpacity
                   onPress={() => {
+                    this.setState({
+                      txtbrand: '',
+                      txtmerk: '',
+                      txttype: '',
+                      txtseries: '',
+                      txtname: '',
+                      txtcolor: '',
+                      txtnotes: '',
+                    });
                     this.toggleModalConfirm();
                   }}
                   style={styles.button}
@@ -115,9 +133,17 @@ export default class AddEntry extends Component {
             <View style={{flex: 2}} />
             <ScrollView>
               {this.state[this.state.column].map((item, index) => (
-                <View key={index} style={styles.item}>
-                  <Text>{item}</Text>
-                </View>
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => {
+                    this.setState({['txt' + this.state.column]: item});
+                    this.toggleModalList(this.state.column);
+                  }}
+                >
+                  <View style={styles.item}>
+                    <Text>{item}</Text>
+                  </View>
+                </TouchableOpacity>
               ))}
             </ScrollView>
             <View style={{flex: 2}} />
@@ -129,7 +155,12 @@ export default class AddEntry extends Component {
           <View style={styles.flexbutrow}>
             <Text style={styles.defaulter}>Name:</Text>
             {/* TODO: FIND AN ALTERNATIVE FOR THIS PIECE OF SHEET vvvvv */}
-            <TextInput style={styles.texin} placeholder="ex: '69 camaro z28" />
+            <TextInput
+              style={styles.texin}
+              placeholder="ex: '69 camaro z28"
+              onChangeText={(txtname) => this.setState({txtname})}
+              value={this.state.txtname}
+            />
             <View style={{flex: 0.2}} />
             <TouchableOpacity
               style={styles.button2}
@@ -147,6 +178,8 @@ export default class AddEntry extends Component {
             <TextInput
               style={styles.texin}
               placeholder="ex: HotWheels, Mattel, etc."
+              onChangeText={(txtbrand) => this.setState({txtbrand})}
+              value={this.state.txtbrand}
             />
             <View style={{flex: 0.2}} />
             <TouchableOpacity
@@ -165,6 +198,8 @@ export default class AddEntry extends Component {
             <TextInput
               style={styles.texin}
               placeholder="ex: BMW, Honda, etc."
+              onChangeText={(txtmerk) => this.setState({txtmerk})}
+              value={this.state.txtmerk}
             />
             <View style={{flex: 0.2}} />
             <TouchableOpacity
@@ -183,6 +218,8 @@ export default class AddEntry extends Component {
             <TextInput
               style={styles.texin}
               placeholder="ex: Car, Planes, Trucks,etc"
+              onChangeText={(txttype) => this.setState({txttype})}
+              value={this.state.txttype}
             />
             <View style={{flex: 0.2}} />
             <TouchableOpacity
@@ -201,6 +238,8 @@ export default class AddEntry extends Component {
             <TextInput
               style={styles.texin}
               placeholder="ex: white, black, etc"
+              onChangeText={(txtcolor) => this.setState({txtcolor})}
+              value={this.state.txtcolor}
             />
             <View style={{flex: 0.2}} />
             <TouchableOpacity
@@ -219,6 +258,8 @@ export default class AddEntry extends Component {
             <TextInput
               style={styles.texin}
               placeholder="ex: Fast & Furious Special"
+              onChangeText={(txtseries) => this.setState({txtseries})}
+              value={this.state.txtseries}
             />
             <View style={{flex: 0.2}} />
             <TouchableOpacity
@@ -237,6 +278,8 @@ export default class AddEntry extends Component {
             <TextInput
               style={[styles.texin, {flex: 3}]}
               placeholder="input any notes here"
+              onChangeText={(txtnotes) => this.setState({txtnotes})}
+              value={this.state.txtnotes}
             />
           </View>
         </View>
@@ -244,8 +287,26 @@ export default class AddEntry extends Component {
           <View style={{flex: 1}} />
           <TouchableOpacity
             style={styles.button}
-            onPress={() => {
-              this.props.navigation.navigate('NotSample');
+            onPress={async () => {
+              let data = await DBFunc.addData({
+                name: this.state.txtname,
+                brand: this.state.txtbrand,
+                merk: this.state.txtmerk,
+                type: this.state.txttype,
+                series: this.state.txtseries,
+                color: this.state.txtcolor,
+                notes: this.state.txtnotes,
+              });
+              if (data !== undefined) {
+                let str = '';
+                str += data.brand ? data.brand[0] + '\n' : '';
+                str += data.name ? data.name[0] + '\n' : '';
+                str += data.merk ? data.merk[0] + '\n' : '';
+                str += data.type ? data.type[0] + '\n' : '';
+                str += data.color ? data.color[0] + '\n' : '';
+                alert(str);
+              }
+              // this.props.navigation.navigate('NotSample');
             }}
           >
             <Ionicons name={'md-create'} size={15} color="black">

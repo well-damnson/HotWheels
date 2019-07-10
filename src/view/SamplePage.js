@@ -53,7 +53,9 @@ export default class SamplePage extends Component {
           </TouchableOpacity>
           <Text />
           <Text />
-          <TouchableOpacity onPress={async () => await DBFunc.find()}>
+          <TouchableOpacity
+            onPress={async () => console.log(await DBFunc.find())}
+          >
             <Text>LocalDatabase</Text>
           </TouchableOpacity>
           <Text />

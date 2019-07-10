@@ -6,8 +6,11 @@ import Constraint from '../config/Constraint';
  * obj = {brand, merk, type, series, name, color, notes}
  */
 let addData = async (obj) => {
+  console.log(obj);
   let validation = validate(obj, Constraint.itemConstraint);
+  console.log(validation);
   if (validation !== undefined) {
+    console.log(validation);
     return validation;
   }
 
