@@ -91,19 +91,30 @@ const AddStack = createStackNavigator({
   DevPage: {screen: App},
 });
 
+const ProfileStack = createStackNavigator({
+  Profile: {
+    screen: Screen.Profile,
+  },
+  NotSample: {
+    screen: Screen.NotSample,
+  },
+  DevPage: {screen: App},
+});
+
 const getTabBarIcon = (navigation, tintColor) => {
   const {routeName} = navigation.state;
-  let IconComponent = MaterialCommunityIcons;
+  let IconComponent = Ionicons;
   let iconName;
   if (routeName === 'Home') {
-    // iconName = `ios-information-circle${focused ? '' : '-outline'}`;
-    iconName = `buffer`;
+    iconName = 'ios-home';
   } else if (routeName === 'SandBox') {
-    iconName = `buffer${focused ? '' : ''}`;
+    iconName = 'ios-aperture';
   } else if (routeName === 'Add') {
-    iconName = `buffer${focused ? '' : ''}`;
+    iconName = 'ios-add';
+  } else if (routeName === 'Profile') {
+    iconName = 'logo-google';
   }
-  return <IconComponent name={iconName} size={10} color={tintColor} />;
+  return <IconComponent name={iconName} size={10} color={Color.accent} />;
 };
 
 export default createAppContainer(
@@ -111,6 +122,7 @@ export default createAppContainer(
     Home: {screen: HomeStack},
     SandBox: {screen: SandStack},
     Add: {screen: AddStack},
+    Profile: {screen: ProfileStack},
   }),
   {
     defaultNavigationOptions: ({navigation}) => ({
