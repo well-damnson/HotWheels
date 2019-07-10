@@ -62,6 +62,9 @@ const HomeStack = createStackNavigator({
   NotSample: {
     screen: Screen.NotSample,
   },
+  EditEntry: {
+    screen: Screen.EditEntry,
+  },
   DevPage: {screen: App},
 });
 
@@ -74,6 +77,9 @@ const SandStack = createStackNavigator({
   },
   NotSample: {
     screen: Screen.NotSample,
+  },
+  EditEntry: {
+    screen: Screen.EditEntry,
   },
   DevPage: {screen: App},
 });
@@ -89,6 +95,9 @@ const AddStack = createStackNavigator({
     screen: Screen.NotSample,
   },
   DevPage: {screen: App},
+  EditEntry: {
+    screen: Screen.EditEntry,
+  },
 });
 
 const ProfileStack = createStackNavigator({
@@ -97,6 +106,9 @@ const ProfileStack = createStackNavigator({
   },
   NotSample: {
     screen: Screen.NotSample,
+  },
+  EditEntry: {
+    screen: Screen.EditEntry,
   },
   DevPage: {screen: App},
 });
@@ -107,7 +119,7 @@ const getTabBarIcon = (navigation, tintColor) => {
   let iconName;
   if (routeName === 'Home') {
     iconName = 'ios-home';
-  } else if (routeName === 'SandBox') {
+  } else if (routeName === 'List') {
     iconName = 'ios-aperture';
   } else if (routeName === 'Add') {
     iconName = 'ios-add';
@@ -120,7 +132,7 @@ const getTabBarIcon = (navigation, tintColor) => {
 export default createAppContainer(
   createBottomTabNavigator({
     Home: {screen: HomeStack},
-    SandBox: {screen: SandStack},
+    List: {screen: SandStack},
     Add: {screen: AddStack},
     Profile: {screen: ProfileStack},
   }),

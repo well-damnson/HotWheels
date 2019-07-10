@@ -1,19 +1,119 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+  Dimensions,
+} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Color from '../Color';
 import Fsize from '../FontSize';
 import Modal from 'react-native-modal';
+import DBFunc from '../database/DatabaseFunction';
 
 export default class Sandboxui extends Component {
   // state = {Brand: '-', Manufacture: '-', Type: '-', Series: '-'};
   state = {
     isModalVisible: false,
+    Data: [],
   };
 
   toggleModal = () => {
     this.setState({isModalVisible: !this.state.isModalVisible});
   };
+
+  async componentDidMount() {
+    await this.fetchData();
+    WDSTools.EE.on('refreshData', this.fetchData);
+  }
+  componentWillUnmount() {
+    WDSTools.EE.off('refreshData', this.fetchData);
+  }
+
+  fetchData = async () => {
+    let Data = await DBFunc.find();
+    console.log(Data);
+    this.setState({Data});
+  };
+
+  MyCardView = ({item}) => {
+    console.log(item);
+    return (
+      <View style={styles.Cardmaster}>
+        <View style={styles.Cardslave}>
+          <View style={styles.flexbutrow}>
+            <Text style={styles.defaulter}>Name:</Text>
+            <Text style={styles.defaulter2}>{item.data.name}</Text>
+          </View>
+        </View>
+        <View style={styles.Cardslave}>
+          <View style={styles.flexbutrow}>
+            <Text style={styles.defaulter}>Brand:</Text>
+            <Text style={styles.defaulter2}>{item.data.brand}</Text>
+          </View>
+        </View>
+        <View style={styles.Cardslave}>
+          <View style={styles.flexbutrow}>
+            <Text style={styles.defaulter}>Manufacture:</Text>
+            <Text style={styles.defaulter2}>{item.data.merk}</Text>
+          </View>
+        </View>
+        <View style={styles.Cardslave}>
+          <View style={styles.flexbutrow}>
+            <Text style={styles.defaulter}>Type:</Text>
+            <Text style={styles.defaulter2}>{item.data.type}</Text>
+          </View>
+        </View>
+        <View style={styles.Cardslave}>
+          <View style={styles.flexbutrow}>
+            <Text style={styles.defaulter}>Color:</Text>
+            <Text style={styles.defaulter2}>{item.data.color}</Text>
+          </View>
+        </View>
+        <View style={styles.Cardslave}>
+          <View style={styles.flexbutrow}>
+            <Text style={styles.defaulter}>Series:</Text>
+            <Text style={styles.defaulter2}>{item.data.series}</Text>
+          </View>
+        </View>
+        <View style={[styles.Cardslave2, {flex: 2}]}>
+          <View style={styles.flexbutrow2}>
+            <Text style={styles.defaulter}>Notes:</Text>
+            <Text style={styles.defaulter2}>{item.data.notes}</Text>
+          </View>
+        </View>
+        <View style={styles.flexbutrow}>
+          <View style={{flex: 1}} />
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              this.props.navigation.navigate('EditEntry', {item});
+            }}
+          >
+            <Ionicons name={'md-create'} size={15} color="black">
+              <Text>Edit</Text>
+            </Ionicons>
+          </TouchableOpacity>
+          <View style={{flex: 1}} />
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              this.toggleModal();
+            }}
+          >
+            <Ionicons name={'md-close-circle-outline'} size={15} color="tomato">
+              <Text>Delete</Text>
+            </Ionicons>
+          </TouchableOpacity>
+          <View style={{flex: 1}} />
+        </View>
+      </View>
+    );
+  };
+
+  _keyExtractor = (item, index) => index.toString();
 
   render() {
     return (
@@ -34,7 +134,7 @@ export default class Sandboxui extends Component {
             <View style={{flex: 2}} />
             <View style={styles.ModalSlave}>
               <View style={{flex: 1}} />
-              <Text style={{flex: 1, fontSize: 15, color: Color.shadow}}>
+              <Text style={{fontSize: 15, color: Color.shadow}}>
                 Are You Sure You Want to Delete This?
               </Text>
               <View style={{flex: 1}} />
@@ -67,82 +167,20 @@ export default class Sandboxui extends Component {
         {/* Modal End */}
         {/* Real View Starts Here */}
         <View style={{flex: 1}} />
-        <View style={styles.Cardmaster}>
-          <View style={styles.Cardslave}>
-            <View style={styles.flexbutrow}>
-              <Text style={styles.defaulter}>Name:</Text>
-              <Text style={styles.defaulter2}>Name Placeholder</Text>
+        <FlatList
+          data={this.state.Data}
+          renderItem={(item) => (
+            <View style={{backgroundColor: 'grey'}}>
+              <View style={{flex: 1}} />
+              {this.MyCardView(item)}
+              <View style={{flex: 1}} />
             </View>
-          </View>
-          <View style={styles.Cardslave}>
-            <View style={styles.flexbutrow}>
-              <Text style={styles.defaulter}>Brand:</Text>
-              <Text style={styles.defaulter2}>Brand Placeholder</Text>
-            </View>
-          </View>
-          <View style={styles.Cardslave}>
-            <View style={styles.flexbutrow}>
-              <Text style={styles.defaulter}>Manufacture:</Text>
-              <Text style={styles.defaulter2}>Manufacture Placeholder</Text>
-            </View>
-          </View>
-          <View style={styles.Cardslave}>
-            <View style={styles.flexbutrow}>
-              <Text style={styles.defaulter}>Type:</Text>
-              <Text style={styles.defaulter2}>Type Placeholder</Text>
-            </View>
-          </View>
-          <View style={styles.Cardslave}>
-            <View style={styles.flexbutrow}>
-              <Text style={styles.defaulter}>Color:</Text>
-              <Text style={styles.defaulter2}>Color Placeholder</Text>
-            </View>
-          </View>
-          <View style={styles.Cardslave}>
-            <View style={styles.flexbutrow}>
-              <Text style={styles.defaulter}>Series:</Text>
-              <Text style={styles.defaulter2}>Series Placeholder</Text>
-            </View>
-          </View>
-          <View style={[styles.Cardslave2, {flex: 2}]}>
-            <View style={styles.flexbutrow2}>
-              <Text style={styles.defaulter}>Notes:</Text>
-              <Text style={styles.defaulter2}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              </Text>
-            </View>
-          </View>
-          <View style={styles.flexbutrow}>
-            <View style={{flex: 1}} />
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => {
-                this.props.navigation.navigate('DevPage');
-              }}
-            >
-              <Ionicons name={'md-create'} size={15} color="black">
-                <Text>Edit</Text>
-              </Ionicons>
-            </TouchableOpacity>
-            <View style={{flex: 1}} />
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => {
-                this.toggleModal();
-              }}
-            >
-              <Ionicons
-                name={'md-close-circle-outline'}
-                size={15}
-                color="tomato"
-              >
-                <Text>Delete</Text>
-              </Ionicons>
-            </TouchableOpacity>
-            <View style={{flex: 1}} />
-          </View>
-        </View>
+          )}
+          keyExtractor={this._keyExtractor}
+          contentContainerStyle={{
+            width: Dimensions.get('window').width,
+          }}
+        />
         <View style={{flex: 1}} />
       </View>
     );
@@ -175,6 +213,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexGrow: 2,
     flexBasis: 10,
+    margin: 10,
   },
 
   Cardslave: {
