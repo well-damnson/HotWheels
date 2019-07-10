@@ -34,8 +34,10 @@ async function signIn() {
       if (result.type === 'success') {
         console.log(result.accessToken);
         await DBFunc.userLogin(result);
+        return true
       } else {
         console.log({cancelled: true});
+        return false
       }
     } catch (e) {
       alert(e.message);
@@ -43,6 +45,7 @@ async function signIn() {
         error: true,
         e: e.message,
       });
+      return false
     }
   }
 }

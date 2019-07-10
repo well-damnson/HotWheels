@@ -34,8 +34,9 @@ export default class Profile extends Component {
           style={styles.button}
           onPress={async () => {
             if (this.state.validity === false) {
-              await GoogleService.signIn();
-              this.setState({validity: true});
+              if (await GoogleService.signIn()) {
+                this.setState({validity: true});
+              }
             } else if (this.state.validity === true) {
               await GoogleService.signOut();
               this.setState({validity: false});
