@@ -19,6 +19,9 @@ export default class Profile extends Component {
     // ExampleValidation();
     let validity = await GoogleService.checkToken();
     let user = await DBFunc.userData();
+    if (user !== undefined) {
+      await GoogleDriveService.init();
+    }
     console.log(user);
     this.setState({validity, user: user.data.user || {name: '', email: ''}});
   }
@@ -27,7 +30,7 @@ export default class Profile extends Component {
     return (
       <View style={styles.container}>
         <View style={{flex: 1}} />
-        <Text>
+        <Text style={{flex: 1, fontSize: 25}}>
           {this.state.validity
             ? `Logged in as ${this.state.user.name}`
             : 'Please Login First'}
@@ -39,6 +42,9 @@ export default class Profile extends Component {
             if (this.state.validity === false) {
               await GoogleService.signIn();
               let user = await DBFunc.userData();
+              if (user !== undefined) {
+                await GoogleDriveService.init();
+              }
               console.log(user);
               this.setState({
                 validity: true,
@@ -58,11 +64,25 @@ export default class Profile extends Component {
             </Text>
           </Ionicons>
         </TouchableOpacity>
-        <View style={{flex: 1}} />
-        <TouchableOpacity onPress={() => GoogleService.signIn()}>
-          <Text>With Google Login Test</Text>
+        <View style={{flex: 2}} />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => GoogleDriveService.uploadBackup()}
+        >
+          <Ionicons name={'ios-arrow-round-up'} size={15} color={Color.sub}>
+            <Text> Upload Data to GDrive</Text>
+          </Ionicons>
         </TouchableOpacity>
-        <View style={{flex: 1}} />
+        <View style={{flex: 0.1}} />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => GoogleDriveService.downloadBackup()}
+        >
+          <Ionicons name={'ios-arrow-round-down'} size={15} color={Color.sub}>
+            <Text> Download Data from GDrive</Text>
+          </Ionicons>
+        </TouchableOpacity>
+        <View style={{flex: 0.5}} />
       </View>
     );
   }
@@ -93,7 +113,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 10,
+    paddingHorizontal: 10,
     backgroundColor: Color.accent,
     fontSize: 15,
     borderRadius: 15,
