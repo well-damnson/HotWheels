@@ -18,15 +18,23 @@ export default class Profile extends Component {
   async componentDidMount() {
     // ExampleValidation();
     let validity = await GoogleService.checkToken();
-    let user = await DBFunc.userData();
-    if (user !== undefined) {
-      await GoogleDriveService.init();
+    let user;
+    if (validity) {
+      user = await DBFunc.userData();
+      if (user !== undefined) {
+        await GoogleDriveService.init();
+      }
+      // console.log(user);
     }
-    console.log(user);
-    this.setState({validity, user: user.data.user || {name: '', email: ''}});
+
+    this.setState({
+      validity,
+      user: (validity && user && user.data.user) || {name: '', email: ''},
+    });
   }
 
   render() {
+    // console.log('validity', this.state.validity);
     return (
       <View style={styles.container}>
         <View style={{flex: 1}} />
@@ -40,15 +48,21 @@ export default class Profile extends Component {
           style={styles.button}
           onPress={async () => {
             if (this.state.validity === false) {
-              await GoogleService.signIn();
-              let user = await DBFunc.userData();
-              if (user !== undefined) {
-                await GoogleDriveService.init();
+              let result = await GoogleService.signIn();
+              let user;
+              if (result) {
+                user = await DBFunc.userData();
+                if (user !== undefined) {
+                  await GoogleDriveService.init();
+                }
+                // console.log(user);
               }
-              console.log(user);
               this.setState({
                 validity: true,
-                user: user.data.user || {name: '', email: ''},
+                user: (result && user && user.data.user) || {
+                  name: '',
+                  email: '',
+                },
               });
             } else if (this.state.validity === true) {
               await GoogleService.signOut();
@@ -66,7 +80,14 @@ export default class Profile extends Component {
         </TouchableOpacity>
         <View style={{flex: 2}} />
         <TouchableOpacity
-          style={styles.button}
+          disabled={this.state.validity === false ? true : false}
+          style={[
+            styles.button,
+            {
+              backgroundColor:
+                this.state.validity === false ? 'gray' : Color.accent,
+            },
+          ]}
           onPress={() => GoogleDriveService.uploadBackup()}
         >
           <Ionicons name={'ios-arrow-round-up'} size={15} color={Color.sub}>
@@ -75,7 +96,14 @@ export default class Profile extends Component {
         </TouchableOpacity>
         <View style={{flex: 0.1}} />
         <TouchableOpacity
-          style={styles.button}
+          disabled={this.state.validity === false ? true : false}
+          style={[
+            styles.button,
+            {
+              backgroundColor:
+                this.state.validity === false ? 'gray' : Color.accent,
+            },
+          ]}
           onPress={() => GoogleDriveService.downloadBackup()}
         >
           <Ionicons name={'ios-arrow-round-down'} size={15} color={Color.sub}>

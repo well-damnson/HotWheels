@@ -29,22 +29,22 @@ async function signIn() {
   } else {
     try {
       const result = await Google.logInAsync(Constant.googleSignIn);
-      console.log('Result: ' + JSON.stringify(result));
+      // console.log('Result: ' + JSON.stringify(result));
 
       if (result.type === 'success') {
-        console.log(result.accessToken);
+        // console.log(result.accessToken);
         await DBFunc.userLogin(result);
         return true
       } else {
-        console.log({cancelled: true});
+        // console.log({cancelled: true});
         return false
       }
     } catch (e) {
       alert(e.message);
-      console.log({
-        error: true,
-        e: e.message,
-      });
+      // console.log({
+      //   error: true,
+      //   e: e.message,
+      // });
       return false
     }
   }
@@ -61,7 +61,7 @@ async function signOut() {
       accessToken,
       clientId,
     };
-    console.log(Google);
+    console.log('Signed Out Successfully');
     await Google.logOutAsync(config);
     await DBFunc.userLogout();
   }

@@ -32,6 +32,7 @@ export default class AddEntry extends Component {
     txtcolor: '',
     txtnotes: '',
     column: 'name',
+    isSaving: false,
   };
 
   async componentDidMount() {
@@ -40,7 +41,7 @@ export default class AddEntry extends Component {
     WDSTools.EE.on('refreshData', this.fetchData);
   }
   componentWillUnmount() {
-    WDSTools.EE.off('refreshData', this.fetchData);
+    WDSTools.EE.removeListener('refreshData', this.fetchData);
   }
 
   fetchData = async () => {
@@ -56,9 +57,9 @@ export default class AddEntry extends Component {
   };
 
   render() {
-    console.log(this.state);
-    console.log(this.state.column);
-    console.log(this.state[this.state.column]);
+    // console.log(this.state);
+    // console.log(this.state.column);
+    // console.log(this.state[this.state.column]);
     return (
       <View style={styles.container}>
         {/* Modal Start */}
@@ -286,31 +287,47 @@ export default class AddEntry extends Component {
         <View style={styles.flexbutrow}>
           <View style={{flex: 1}} />
           <TouchableOpacity
+            disabled={this.state.isSaving}
             style={styles.button}
-            onPress={async () => {
-              let data = await DBFunc.addData({
-                name: this.state.txtname,
-                brand: this.state.txtbrand,
-                merk: this.state.txtmerk,
-                type: this.state.txttype,
-                series: this.state.txtseries,
-                color: this.state.txtcolor,
-                notes: this.state.txtnotes,
+            onPress={() => {
+              this.setState({isSaving: true}, async () => {
+                let data = await DBFunc.addData({
+                  name: this.state.txtname,
+                  brand: this.state.txtbrand,
+                  merk: this.state.txtmerk,
+                  type: this.state.txttype,
+                  series: this.state.txtseries,
+                  color: this.state.txtcolor,
+                  notes: this.state.txtnotes,
+                });
+                if (data !== undefined) {
+                  let str = '';
+                  str += data.name ? 'Name' + ' cannot be blank\n' : '';
+                  str += data.brand ? 'Brand' + ' cannot be blank\n' : '';
+                  str += data.merk ? 'Manufacture' + ' cannot be blank\n' : '';
+                  str += data.type ? 'Type' + ' cannot be blank\n' : '';
+                  str += data.color ? 'Color' + ' cannot be blank\n' : '';
+                  alert(str);
+                } else {
+                  alert('Data Added');
+                }
+                this.setState({
+                  isSaving: false,
+                  txtbrand: '',
+                  txtmerk: '',
+                  txttype: '',
+                  txtseries: '',
+                  txtname: '',
+                  txtcolor: '',
+                  txtnotes: '',
+                });
               });
-              if (data !== undefined) {
-                let str = '';
-                str += data.brand ? data.brand[0] + '\n' : '';
-                str += data.name ? data.name[0] + '\n' : '';
-                str += data.merk ? data.merk[0] + '\n' : '';
-                str += data.type ? data.type[0] + '\n' : '';
-                str += data.color ? data.color[0] + '\n' : '';
-                alert(str);
-              }
+
               // this.props.navigation.navigate('NotSample');
             }}
           >
             <Ionicons name={'md-create'} size={15} color="black">
-              <Text> Save</Text>
+              <Text>{this.state.isSaving ? 'Saving . . .' : 'Save'}</Text>
             </Ionicons>
           </TouchableOpacity>
           <View style={{flex: 1}} />

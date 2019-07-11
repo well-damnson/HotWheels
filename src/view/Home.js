@@ -12,10 +12,10 @@ import DBFunc from '../database/DatabaseFunction';
 export default class Homepage extends Component {
   state = {
     isSearching: false,
-    Brand: '-',
-    Manufacture: '-',
-    Type: '-',
-    Series: '-',
+    Brand: undefined,
+    Manufacture: undefined,
+    Type: undefined,
+    Series: undefined,
     Data: {
       brand: [],
       merk: [],
@@ -28,7 +28,7 @@ export default class Homepage extends Component {
     WDSTools.EE.on('refreshData', this.fetchData);
   }
   componentWillUnmount() {
-    WDSTools.EE.off('refreshData', this.fetchData);
+    WDSTools.EE.removeListener('refreshData', this.fetchData);
   }
 
   fetchData = async () => {
@@ -146,16 +146,20 @@ export default class Homepage extends Component {
               style={styles.button}
               onPress={async () => {
                 this.setState({isSearching: true});
-                let data = await DBFunc.find({
-                  filter: [
-                    {by: 'merk', value: this.state.Manufacture},
-                    {by: 'brand', value: this.state.Brand},
-                    {by: 'type', value: this.state.Type},
-                    {by: 'series', value: this.state.Series},
-                  ],
-                });
-                console.log(data.length);
+                let filter = [
+                  {by: 'merk', value: this.state.Manufacture},
+                  {by: 'brand', value: this.state.Brand},
+                  {by: 'type', value: this.state.Type},
+                  {by: 'series', value: this.state.Series},
+                ];
+                let data = await DBFunc.find({filter});
+                // console.log(data);
+                // console.log(data.length);
                 this.setState({isSearching: false});
+                this.props.navigation.navigate('SearchList', {
+                  data: [...data],
+                  filter,
+                });
                 // TODO: NAVIGATE WITH PROPS
                 // this.props.navigation.navigate('SamplePage');
               }}
@@ -171,7 +175,13 @@ export default class Homepage extends Component {
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
-                this.props.navigation.navigate('SamplePage');
+                this.setState({
+                  Brand: undefined,
+                  Manufacture: undefined,
+                  Type: undefined,
+                  Series: undefined,
+                });
+                // this.props.navigation.navigate('SamplePage');
               }}
             >
               <Text>Cancel</Text>

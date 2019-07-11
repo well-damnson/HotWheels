@@ -200,7 +200,7 @@ class Files {
       downloadFileOptions.headers,
     );
 
-    console.log('downloadOption: ', downloadFileOptions);
+    // console.log('downloadOption: ', downloadFileOptions);
     let downloadFile = (options) => {
       if (typeof options !== 'object')
         throw new Error('downloadFile: Invalid value for argument `options`');

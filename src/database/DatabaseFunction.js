@@ -6,11 +6,11 @@ import Constraint from '../config/Constraint';
  * obj = {brand, merk, type, series, name, color, notes}
  */
 let addData = async (obj) => {
-  console.log(obj);
+  // console.log(obj);
   let validation = validate(obj, Constraint.itemConstraint);
-  console.log(validation);
+  // console.log(validation);
   if (validation !== undefined) {
-    console.log(validation);
+    // console.log(validation);
     return validation;
   }
 
@@ -60,6 +60,10 @@ let find = async (obj = {}) => {
     }
   }
   data = [...filteredData];
+  data = data.sort((a, b) => {
+    console.log(a, b);
+    return (a.data.name > b.data.name) - (a.data.name < b.data.name);
+  });
 
   console.log('Data Found: ', data.length);
   return data;
@@ -119,6 +123,14 @@ let filterList = async () => {
       columnList.color.push(docs[i].data.color);
     }
   }
+  columnList = {
+    brand: columnList.brand.sort(),
+    merk: columnList.merk.sort(),
+    type: columnList.type.sort(),
+    series: columnList.series.sort(),
+    name: columnList.name.sort(),
+    color: columnList.color.sort(),
+  };
 
   return columnList;
 };
@@ -165,7 +177,7 @@ let userLogin = async (sign) => {
   return new Promise((res, rej) => {
     Database.userDB.insert({data}, (err, newDoc) => {
       if (err) rej(err);
-      console.log('Data Inserted')
+      console.log('Data Inserted');
       res();
     });
   });

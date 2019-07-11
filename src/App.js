@@ -20,7 +20,7 @@ import WDSTools from './WDSTools';
 
 class App extends React.Component {
   componentDidMount() {
-    console.log('Current Mode: ' + __DEV__);
+    // console.log('Current Mode: ' + __DEV__);
     // console.log('List of Pages:' + Screen);
   }
   render() {
@@ -66,6 +66,9 @@ const HomeStack = createStackNavigator({
     screen: Screen.EditEntry,
   },
   DevPage: {screen: App},
+  SearchList: {
+    screen: Screen.Sandboxui,
+  },
 });
 
 const SandStack = createStackNavigator({
@@ -113,7 +116,7 @@ const ProfileStack = createStackNavigator({
   DevPage: {screen: App},
 });
 
-const getTabBarIcon = (navigation, tintColor) => {
+const getTabBarIcon = (navigation, tintColor, focused) => {
   const {routeName} = navigation.state;
   let IconComponent = Ionicons;
   let iconName;
@@ -126,25 +129,34 @@ const getTabBarIcon = (navigation, tintColor) => {
   } else if (routeName === 'Profile') {
     iconName = 'logo-google';
   }
-  return <IconComponent name={iconName} size={10} color={Color.accent} />;
+  return (
+    <IconComponent
+      name={iconName}
+      size={24}
+      color={focused ? Color.accent : Color.sub}
+    />
+  );
 };
 
 export default createAppContainer(
-  createBottomTabNavigator({
-    Home: {screen: HomeStack},
-    List: {screen: SandStack},
-    Add: {screen: AddStack},
-    Profile: {screen: ProfileStack},
-  }),
-  {
-    defaultNavigationOptions: ({navigation}) => ({
-      tabBarIcon: ({tintColor}) => getTabBarIcon(navigation, tintColor),
-    }),
-    tabBarOptions: {
-      activeTintColor: Color.accent,
-      inactiveTintColor: Color.sub,
+  createBottomTabNavigator(
+    {
+      Home: HomeStack,
+      List: SandStack,
+      Add: AddStack,
+      Profile: ProfileStack,
     },
-  },
+    {
+      defaultNavigationOptions: ({navigation}) => ({
+        tabBarIcon: ({tintColor, focused}) =>
+          getTabBarIcon(navigation, tintColor, focused),
+      }),
+      tabBarOptions: {
+        activeTintColor: Color.accent,
+        inactiveTintColor: Color.sub,
+      },
+    },
+  ),
 );
 
 const styles = StyleSheet.create({

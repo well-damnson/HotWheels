@@ -18,7 +18,9 @@ export default class Sandboxui extends Component {
   state = {
     isModalVisible: false,
     Data: [],
+    Filter: [],
     selectedItemToRemove: {},
+    useListener: false,
   };
 
   toggleModal = (itemToRemove) => {
@@ -29,21 +31,35 @@ export default class Sandboxui extends Component {
   };
 
   async componentDidMount() {
-    await this.fetchData();
+    let Data =
+      this.props.navigation.state.params &&
+      this.props.navigation.state.params.data;
+    let Filter =
+      this.props.navigation.state.params &&
+      this.props.navigation.state.params.filter;
+    if (Data) {
+      this.setState({Data, Filter});
+    } else {
+      await this.fetchData();
+
+      this.setState({useListener: true});
+    }
     WDSTools.EE.on('refreshData', this.fetchData);
   }
   componentWillUnmount() {
-    WDSTools.EE.off('refreshData', this.fetchData);
+    WDSTools.EE.removeListener('refreshData', this.fetchData);
   }
 
   fetchData = async () => {
-    let Data = await DBFunc.find();
-    console.log(Data);
+    let Filter =
+      this.state.Filter.length > 0 ? {filter: this.state.Filter} : {};
+    let Data = await DBFunc.find(Filter);
+    // console.log(Data);
     this.setState({Data});
   };
 
   MyCardView = ({item}) => {
-    console.log(item);
+    // console.log(item);
     return (
       <View style={styles.Cardmaster}>
         <View style={styles.Cardslave}>

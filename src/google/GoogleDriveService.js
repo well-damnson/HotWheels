@@ -64,6 +64,7 @@ let uploadBackup = async () => {
     let content = await DBFunc.find();
     await _deleteAllData();
     await _upload(content);
+    alert('Backup Data Uploaded');
   } else {
     await init();
     await uploadBackup();
@@ -80,7 +81,7 @@ let downloadBackup = async () => {
         const {data: element} = data[index];
         await DBFunc.addData(element);
       }
-      console.log('Download Backup Completed');
+      alert('Download Backup Completed');
     } else {
       alert('No Backup File Found');
     }

@@ -32,9 +32,22 @@ export default class EditEntry extends Component {
     txtcolor: this.props.navigation.getParam('data').color || '',
     txtnotes: this.props.navigation.getParam('data').notes || '',
     column: 'name',
+    isSaving: false,
   };
 
-  async componentDidMount() {}
+  async componentDidMount() {
+    await this.fetchData();
+
+    WDSTools.EE.on('refreshData', this.fetchData);
+  }
+  componentWillUnmount() {
+    WDSTools.EE.removeListener('refreshData', this.fetchData);
+  }
+
+  fetchData = async () => {
+    let Data = await DBFunc.filterList();
+    this.setState({...Data});
+  };
 
   toggleModalConfirm = () => {
     this.setState({isModalConfirmVisible: !this.state.isModalConfirmVisible});
@@ -44,9 +57,9 @@ export default class EditEntry extends Component {
   };
 
   render() {
-    console.log(this.state);
-    console.log(this.state.column);
-    console.log(this.state[this.state.column]);
+    // console.log(this.state);
+    // console.log(this.state.column);
+    // console.log(this.state[this.state.column]);
     return (
       <View style={styles.container}>
         {/* Modal Start */}
@@ -276,9 +289,8 @@ export default class EditEntry extends Component {
           <TouchableOpacity
             style={styles.button}
             onPress={async () => {
-              let data = await DBFunc.edit(
-                this.props.navigation.getParam('_id'),
-                {
+              this.setState({isSaving: true}, async () => {
+                let data = await DBFunc.addData({
                   name: this.state.txtname,
                   brand: this.state.txtbrand,
                   merk: this.state.txtmerk,
@@ -286,24 +298,39 @@ export default class EditEntry extends Component {
                   series: this.state.txtseries,
                   color: this.state.txtcolor,
                   notes: this.state.txtnotes,
-                },
-              );
-              if (data !== undefined) {
-                let str = '';
-                str += data.brand ? data.brand[0] + '\n' : '';
-                str += data.name ? data.name[0] + '\n' : '';
-                str += data.merk ? data.merk[0] + '\n' : '';
-                str += data.type ? data.type[0] + '\n' : '';
-                str += data.color ? data.color[0] + '\n' : '';
-                alert(str);
-              } else {
-                this.props.navigation.goBack();
-              }
+                });
+                if (data !== undefined) {
+                  let str = '';
+                  str += data.brand ? data.brand[0] + '\n' : '';
+                  str += data.name ? data.name[0] + '\n' : '';
+                  str += data.merk ? data.merk[0] + '\n' : '';
+                  str += data.type ? data.type[0] + '\n' : '';
+                  str += data.color ? data.color[0] + '\n' : '';
+                  alert(str);
+                } else {
+                  alert('Data Added');
+                }
+                this.setState(
+                  {
+                    isSaving: false,
+                    txtbrand: '',
+                    txtmerk: '',
+                    txttype: '',
+                    txtseries: '',
+                    txtname: '',
+                    txtcolor: '',
+                    txtnotes: '',
+                  },
+                  () => {
+                    this.props.navigation.goBack();
+                  },
+                );
+              });
               // this.props.navigation.navigate('NotSample');
             }}
           >
             <Ionicons name={'md-create'} size={15} color="black">
-              <Text> Save</Text>
+              <Text>{this.state.isSaving ? 'Saving . . .' : 'Save'}</Text>
             </Ionicons>
           </TouchableOpacity>
           <View style={{flex: 1}} />

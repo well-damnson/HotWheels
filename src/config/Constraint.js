@@ -10,14 +10,14 @@ let itemConstraint = {
     presence: true,
     length: {
       minimum: 1,
-      message: 'Brand cannot be blank',
+      message: 'Manufacture cannot be blank',
     },
   },
   type: {
     presence: true,
     length: {
       minimum: 1,
-      message: 'Brand cannot be blank',
+      message: 'Type cannot be blank',
     },
   },
   series: {},
@@ -25,14 +25,14 @@ let itemConstraint = {
     presence: true,
     length: {
       minimum: 1,
-      message: 'Brand cannot be blank',
+      message: 'Name cannot be blank',
     },
   },
   color: {
     presence: true,
     length: {
       minimum: 1,
-      message: 'Brand cannot be blank',
+      message: 'Color cannot be blank',
     },
   },
   notes: {},
