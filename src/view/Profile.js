@@ -13,11 +13,14 @@ import DBFunc from '../database/DatabaseFunction';
 export default class Profile extends Component {
   state = {
     validity: false,
+    user: {name: '', email: ''},
   };
   async componentDidMount() {
     // ExampleValidation();
     let validity = await GoogleService.checkToken();
-    this.setState({validity});
+    let user = await DBFunc.userData();
+    console.log(user);
+    this.setState({validity, user: user.data.user});
   }
 
   render() {
@@ -26,7 +29,7 @@ export default class Profile extends Component {
         <View style={{flex: 1}} />
         <Text>
           {this.state.validity
-            ? 'Please restart the application for data to reload'
+            ? `Logged in as ${this.state.user.name}`
             : 'Please Login First'}
         </Text>
         <View style={{flex: 1}} />
@@ -34,12 +37,14 @@ export default class Profile extends Component {
           style={styles.button}
           onPress={async () => {
             if (this.state.validity === false) {
-              if (await GoogleService.signIn()) {
-                this.setState({validity: true});
-              }
+              await GoogleService.signIn();
+
+              this.setState({validity: true});
+              let user = await DBFunc.userData();
+              console.log(user);
             } else if (this.state.validity === true) {
               await GoogleService.signOut();
-              this.setState({validity: false});
+              this.setState({validity: false, user: {name: '', email: ''}});
             }
           }}
         >
