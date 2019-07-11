@@ -162,10 +162,17 @@ let userLogin = async (sign) => {
     refreshToken,
     user,
   };
-  await Database.userDB.insert({data}, (err, newDoc) => {
-    if (err) throw err;
-    console.log('Data Inserted');
+  return new Promise((res, rej) => {
+    Database.userDB.insert({data}, (err, newDoc) => {
+      if (err) rej(err);
+      console.log('Data Inserted')
+      res();
+    });
   });
+  //, (err, newDoc) => {
+  //   if (err) throw err;
+  //   console.log('Data Inserted');
+  // }
 };
 
 let userLogout = async () => {

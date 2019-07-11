@@ -20,7 +20,7 @@ export default class Profile extends Component {
     let validity = await GoogleService.checkToken();
     let user = await DBFunc.userData();
     console.log(user);
-    this.setState({validity, user: user.data.user});
+    this.setState({validity, user: user.data.user || {name: '', email: ''}});
   }
 
   render() {
@@ -38,10 +38,12 @@ export default class Profile extends Component {
           onPress={async () => {
             if (this.state.validity === false) {
               await GoogleService.signIn();
-
-              this.setState({validity: true});
               let user = await DBFunc.userData();
               console.log(user);
+              this.setState({
+                validity: true,
+                user: user.data.user || {name: '', email: ''},
+              });
             } else if (this.state.validity === true) {
               await GoogleService.signOut();
               this.setState({validity: false, user: {name: '', email: ''}});
