@@ -169,15 +169,16 @@ let remove = async (_id) => {
 let userLogin = async (sign) => {
   let {accessToken, idToken, refreshToken, user} = sign;
   let data = {
-    accessToken,
-    idToken,
-    refreshToken,
+    accessToken: accessToken || user.accessToken,
+    idToken: idToken || user.idToken,
+    refreshToken: refreshToken || user.refreshToken,
     user,
   };
+  console.log('userLogin Data:', data);
   return new Promise((res, rej) => {
     Database.userDB.insert({data}, (err, newDoc) => {
       if (err) rej(err);
-      console.log('Data Inserted');
+      console.log('Data Inserted:', newDoc);
       res();
     });
   });

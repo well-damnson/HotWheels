@@ -9,6 +9,7 @@ let init = async () => {
   console.log('Initializing Google Drive');
   if (await GoogleService.checkToken()) {
     let user = await DBFunc.userData();
+    console.log('GDInit User:', user);
     if (user) {
       GDrive.setAccessToken(user.data.accessToken);
       GDrive.init();
@@ -24,7 +25,8 @@ let init = async () => {
     }
   } else {
     await GoogleService.signOut();
-    await GoogleService.signIn();
+    initialized = false;
+    // await GoogleService.signIn();
   }
 };
 
@@ -48,7 +50,7 @@ let checkfile = async () => {
     return data.files;
   } else {
     await init();
-    await checkfile();
+    if (initialized) await checkfile();
   }
 };
 
@@ -67,7 +69,7 @@ let uploadBackup = async () => {
     alert('Backup Data Uploaded');
   } else {
     await init();
-    await uploadBackup();
+    if (initialized) await uploadBackup();
   }
 };
 
@@ -87,7 +89,7 @@ let downloadBackup = async () => {
     }
   } else {
     await init();
-    await downloadBackup();
+    if (initialized) await downloadBackup();
   }
 };
 

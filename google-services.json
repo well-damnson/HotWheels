@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1007274877925",
+    "firebase_url": "https://die-cast-cars-co-1561033155944.firebaseio.com",
+    "project_id": "die-cast-cars-co-1561033155944",
+    "storage_bucket": "die-cast-cars-co-1561033155944.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1007274877925:android:033b8b96c6f4266b",
+        "android_client_info": {
+          "package_name": "com.welldamson.diecastcarscollector"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1007274877925-iba480tt7vfdhg39p5a74v6cmhru9sk1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.welldamson.diecastcarscollector",
+            "certificate_hash": "866748a856cab46f1e4f00cab9dbb43544ee29b1"
+          }
+        },
+        {
+          "client_id": "1007274877925-3oapo1285i0big1ehvcv33k109ts08fc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsRfeh7AEuL5fO0PRM1l7_878OxJmIp68"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1007274877925-3oapo1285i0big1ehvcv33k109ts08fc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

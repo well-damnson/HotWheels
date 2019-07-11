@@ -40,7 +40,7 @@ export default class Profile extends Component {
         <View style={{flex: 1}} />
         <Text style={{flex: 1, fontSize: 25}}>
           {this.state.validity
-            ? `Logged in as ${this.state.user.name}`
+            ? `Logged in as ${this.state.user.name||this.state.user.displayName}`
             : 'Please Login First'}
         </Text>
         <View style={{flex: 1}} />

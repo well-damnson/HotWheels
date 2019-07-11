@@ -21,7 +21,8 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.welldamson.diecastcarscollector"
+      "package": "com.welldamson.diecastcarscollector",
+      "googleServicesFile": "./google-services.json"
     }
   }
 }
