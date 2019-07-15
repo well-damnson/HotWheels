@@ -97,10 +97,9 @@ export default class Homepage extends Component {
             </View>
           </View>
           {/* start Tahun */}
-          {/* start Tahun */}
           <View style={styles.flexbutrow}>
             <View style={styles.thespacer}>
-              <Text style={styles.defaulter}>Tahun </Text>
+              <Text style={styles.defaulter}>Year </Text>
               <Text style={styles.defaulter}>:</Text>
             </View>
             <View style={styles.pickapsulated}>

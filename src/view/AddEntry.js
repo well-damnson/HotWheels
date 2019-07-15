@@ -207,7 +207,7 @@ export default class AddEntry extends Component {
             <Text style={styles.defaulter}>Tahun:</Text>
             <TextInput
               style={styles.texin}
-              placeholder="ex: Car, Planes, Trucks,etc"
+              placeholder="ex: 2019,1969,etc"
               onChangeText={(txttahun) => this.setState({txttahun})}
               value={this.state.txttahun}
             />
