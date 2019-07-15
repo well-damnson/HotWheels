@@ -14,11 +14,13 @@ export default class Homepage extends Component {
     isSearching: false,
     Brand: undefined,
     Manufacture: undefined,
+    Name: undefined,
     Tahun: undefined,
     Series: undefined,
     Data: {
       brand: [],
       merk: [],
+      name: [],
       tahun: [],
       series: [],
     },
@@ -71,7 +73,7 @@ export default class Homepage extends Component {
               </Picker>
             </View>
           </View>
-          {/* start Manufacture */}
+          {/* start Name */}
           <View style={styles.flexbutrow}>
             <View style={styles.thespacer}>
               <Text style={styles.defaulter}>Name </Text>
@@ -79,10 +81,10 @@ export default class Homepage extends Component {
             </View>
             <View style={styles.pickapsulated}>
               <Picker
-                selectedValue={this.state.Manufacture}
+                selectedValue={this.state.Name}
                 style={styles.picker}
                 onValueChange={(itemValue, itemIndex) =>
-                  this.setState({Manufacture: itemValue})
+                  this.setState({Name: itemValue})
                 }
               >
                 <Picker.Item label="All" value={undefined} />
@@ -150,6 +152,7 @@ export default class Homepage extends Component {
                 this.setState({isSearching: true});
                 let filter = [
                   {by: 'merk', value: this.state.Manufacture},
+                  {by: 'name', value: this.state.Name},
                   {by: 'brand', value: this.state.Brand},
                   {by: 'tahun', value: this.state.Tahun},
                   {by: 'series', value: this.state.Series},
@@ -180,6 +183,7 @@ export default class Homepage extends Component {
                 this.setState({
                   Brand: undefined,
                   Manufacture: undefined,
+                  Name: undefined,
                   Tahun: undefined,
                   Series: undefined,
                 });
