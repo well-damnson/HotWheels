@@ -2,32 +2,47 @@ import DBFunc from '../database/DatabaseFunction';
 import GDrive from './GDrive';
 import GoogleService from './GoogleService';
 let fileName = 'DieCastCollectors.backup.json';
+import {ToastAndroid} from 'react-native';
 
 let initialized = false;
 
-let init = async () => {
-  console.log('Initializing Google Drive');
-  if (await GoogleService.checkToken()) {
-    let user = await DBFunc.userData();
-    console.log('GDInit User:', user);
-    if (user) {
-      GDrive.setAccessToken(user.data.accessToken);
-      GDrive.init();
-      if (GDrive.isInitialized()) {
-        console.log('Google Drive Initialized');
-        initialized = true;
+let init = () => {
+  // alert('GOOGLE DRIVE INIT');
+
+  // console.log('Initializing Google Drive');
+  return new Promise(async (res) => {
+    let checkToken = await GoogleService.checkToken();
+
+    if (checkToken) {
+      // alert('DRIVE CHECK TOKEN SUCCESS');
+      let user = await DBFunc.userData();
+      // console.log('GDInit User:', user);
+      // alert(`DRIVE INIT USER DATA: ${JSON.stringify(user)}`);
+      if (user) {
+        // alert(`DRIVE INIT USER DATA: ${JSON.stringify(user)}`);
+        // alert(`DRIVE INIT USER TOKEN: ${user.data.accessToken}`);
+        GDrive.setAccessToken(user.data.accessToken);
+        GDrive.init();
+        if (GDrive.isInitialized()) {
+          console.log('Google Drive Initialized');
+          // alert(`DRIVE INIT SUCCESS`);
+          initialized = true;
+          res();
+        } else {
+          initialized = false;
+          res();
+        }
       } else {
+        alert('You Are Not Logged in');
         initialized = false;
+        res();
       }
     } else {
-      alert('You Are Not Logged in');
       initialized = false;
+      res();
+      // await GoogleService.signIn();
     }
-  } else {
-    await GoogleService.signOut();
-    initialized = false;
-    // await GoogleService.signIn();
-  }
+  });
 };
 
 let _upload = async (content) => {
@@ -65,6 +80,7 @@ let uploadBackup = async () => {
   if (initialized) {
     let content = await DBFunc.find();
     await _deleteAllData();
+    ToastAndroid.show('Uploading...', ToastAndroid.SHORT);
     await _upload(content);
     alert('Backup Data Uploaded');
   } else {
@@ -75,17 +91,23 @@ let uploadBackup = async () => {
 
 let downloadBackup = async () => {
   if (initialized) {
-    let files = await checkfile();
-    if (files.length > 0) {
-      let data = await GDrive.files.download(files[0].id);
-      await DBFunc.remove();
-      for (let index = 0; index < data.length; index++) {
-        const {data: element} = data[index];
-        await DBFunc.addData(element);
+    try {
+      ToastAndroid.show('Checking File...', ToastAndroid.SHORT);
+      let files = await checkfile();
+      if (files.length > 0) {
+        ToastAndroid.show('Downloading...', ToastAndroid.SHORT);
+        let data = await GDrive.files.download(files[0].id);
+        await DBFunc.remove();
+        for (let index = 0; index < data.length; index++) {
+          const {data: element} = data[index];
+          await DBFunc.addData(element);
+        }
+        alert('Download Backup Completed');
+      } else {
+        alert('No Backup File Found');
       }
-      alert('Download Backup Completed');
-    } else {
-      alert('No Backup File Found');
+    } catch (e) {
+      alert(e);
     }
   } else {
     await init();

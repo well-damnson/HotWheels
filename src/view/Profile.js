@@ -1,5 +1,11 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ToastAndroid,
+} from 'react-native';
 import Modal from 'react-native-modal';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Color from '../Color';
@@ -17,30 +23,91 @@ export default class Profile extends Component {
   };
   async componentDidMount() {
     // ExampleValidation();
-    let validity = await GoogleService.checkToken();
-    let user;
-    if (validity) {
-      user = await DBFunc.userData();
-      if (user !== undefined) {
-        await GoogleDriveService.init();
-      }
-      // console.log(user);
-    }
-
-    this.setState({
-      validity,
-      user: (validity && user && user.data.user) || {name: '', email: ''},
-    });
+    // try {
+    //   let validity = await GoogleService.checkToken();
+    //   // ToastAndroid.show(
+    //   //   `checktoken done with result: ${validity}`,
+    //   //   ToastAndroid.SHORT,
+    //   // );
+    //   // await alert(`checktoken done with result: ${validity}`);
+    //   let user = undefined;
+    //   if (validity === true) {
+    //     user = await DBFunc.userData();
+    //     // ToastAndroid.show(`user: ${JSON.stringify(user)}`, ToastAndroid.SHORT);
+    //     // alert(JSON.stringify(user));
+    //     if (user !== undefined) {
+    //       await GoogleDriveService.init();
+    //     }
+    //     // console.log(user);
+    //     this.setState(
+    //       {
+    //         validity,
+    //         user: (validity && user && user.data.user) || {name: '', email: ''},
+    //       },
+    //       () => {
+    //         // ToastAndroid.show(
+    //         //   `COMPONENT DID MOUNT SET STATE DONE WITH DATA: ${JSON.stringify({
+    //         //     silentLogin: false,
+    //         //     validity,
+    //         //     user: (validity && user && user.data.user) || {
+    //         //       name: '',
+    //         //       email: '',
+    //         //     },
+    //         //   })}`,
+    //         //   ToastAndroid.SHORT,
+    //         // );
+    //         // alert(
+    //         //   `COMPONENT DID MOUNT SET STATE DONE WITH DATA: ${JSON.stringify({
+    //         //     silentLogin: false,
+    //         //     validity,
+    //         //     user: (validity && user && user.data.user) || {name: '', email: ''},
+    //         //   })}`,
+    //         // );
+    //       },
+    //     );
+    //   } else {
+    //     this.setState(
+    //       {
+    //         validity: false,
+    //         user: {name: '', email: ''},
+    //       },
+    //       () => {
+    //         // ToastAndroid.show(
+    //         //   `COMPONENT DID MOUNT SET STATE DONE WITH DATA: ${JSON.stringify({
+    //         //     silentLogin: false,
+    //         //     validity: false,
+    //         //     user: {name: '', email: ''},
+    //         //   })}`,
+    //         //   ToastAndroid.SHORT,
+    //         // );
+    //         // alert(
+    //         //   `COMPONENT DID MOUNT SET STATE DONE WITH DATA: ${JSON.stringify({
+    //         //     silentLogin: false,
+    //         //     validity,
+    //         //     user: (validity && user && user.data.user) || {name: '', email: ''},
+    //         //   })}`,
+    //         // );
+    //       },
+    //     );
+    //   }
+    // } catch (e) {
+    //   alert(`error: ${e}`);
+    // }
   }
 
   render() {
     // console.log('validity', this.state.validity);
+    // ToastAndroid.show(
+    //   `State: ${JSON.stringify(this.state)}`,
+    //   ToastAndroid.SHORT,
+    // );
     return (
       <View style={styles.container}>
         <View style={{flex: 1}} />
         <Text style={{flex: 1, fontSize: 25}}>
           {this.state.validity
-            ? `Logged in as ${this.state.user.name||this.state.user.displayName}`
+            ? `Logged in as ${this.state.user.name ||
+                this.state.user.displayName}`
             : 'Please Login First'}
         </Text>
         <View style={{flex: 1}} />
@@ -48,22 +115,36 @@ export default class Profile extends Component {
           style={styles.button}
           onPress={async () => {
             if (this.state.validity === false) {
-              let result = await GoogleService.signIn();
-              let user;
-              if (result) {
-                user = await DBFunc.userData();
-                if (user !== undefined) {
-                  await GoogleDriveService.init();
+              try {
+                let result = await GoogleService.signIn();
+                let user;
+                if (result) {
+                  user = await DBFunc.userData();
+                  // alert(`BUTTON USER DATA RESULT: ${JSON.stringify(user)}`);
+                  if (!!user) {
+                    // alert(`START GOOGLE DRIVE INIT`);
+                    await GoogleDriveService.init();
+                  }
+                  // console.log(user);
                 }
-                // console.log(user);
+                // alert(
+                //   `PROFILE USER GET FROM LOGIN BUTTON: ${JSON.stringify(user)}`,
+                // );
+                this.setState(
+                  {
+                    validity: !!result,
+                    user: (result && user && user.data.user) || {
+                      name: '',
+                      email: '',
+                    },
+                  },
+                  () => {
+                    // alert(`SetState DONE`);
+                  },
+                );
+              } catch (e) {
+                alert(e);
               }
-              this.setState({
-                validity: true,
-                user: (result && user && user.data.user) || {
-                  name: '',
-                  email: '',
-                },
-              });
             } else if (this.state.validity === true) {
               await GoogleService.signOut();
               this.setState({validity: false, user: {name: '', email: ''}});
@@ -80,34 +161,36 @@ export default class Profile extends Component {
         </TouchableOpacity>
         <View style={{flex: 2}} />
         <TouchableOpacity
-          disabled={this.state.validity === false ? true : false}
+          disabled={!this.state.validity ? true : false}
           style={[
             styles.button,
             {
-              backgroundColor:
-                this.state.validity === false ? 'gray' : Color.accent,
+              backgroundColor: !this.state.validity ? 'gray' : Color.accent,
             },
           ]}
-          onPress={() => GoogleDriveService.uploadBackup()}
+          onPress={async () => {
+            await GoogleDriveService.uploadBackup();
+          }}
         >
           <Ionicons name={'ios-arrow-round-up'} size={15} color={Color.sub}>
-            <Text> Upload Data to GDrive</Text>
+            <Text>{'Upload Data to GDrive'}</Text>
           </Ionicons>
         </TouchableOpacity>
         <View style={{flex: 0.1}} />
         <TouchableOpacity
-          disabled={this.state.validity === false ? true : false}
+          disabled={!this.state.validity ? true : false}
           style={[
             styles.button,
             {
-              backgroundColor:
-                this.state.validity === false ? 'gray' : Color.accent,
+              backgroundColor: !this.state.validity ? 'gray' : Color.accent,
             },
           ]}
-          onPress={() => GoogleDriveService.downloadBackup()}
+          onPress={async () => {
+            await GoogleDriveService.downloadBackup();
+          }}
         >
           <Ionicons name={'ios-arrow-round-down'} size={15} color={Color.sub}>
-            <Text> Download Data from GDrive</Text>
+            <Text>{'Download Data from GDrive'}</Text>
           </Ionicons>
         </TouchableOpacity>
         <View style={{flex: 0.5}} />

@@ -27,10 +27,13 @@ let addData = async (obj) => {
     created_at: now,
     updated_at: now,
   };
-  await Database.db.insert({data}, (err, newDoc) => {
-    if (err) throw err;
-    console.log('Data Added');
-    refreshData();
+  return new Promise((res) => {
+    Database.db.insert({data}, (err, newDoc) => {
+      if (err) rej(err);
+      console.log('Data Added');
+      refreshData();
+      res();
+    });
   });
 };
 
@@ -167,14 +170,15 @@ let remove = async (_id) => {
 };
 
 let userLogin = async (sign) => {
+  console.log('userLogin sign in data:', sign);
   let {accessToken, idToken, refreshToken, user} = sign;
   let data = {
-    accessToken: accessToken || user.accessToken,
-    idToken: idToken || user.idToken,
-    refreshToken: refreshToken || user.refreshToken,
+    accessToken: accessToken || user.auth.accessToken,
+    idToken: idToken || user.auth.idToken,
+    refreshToken: refreshToken || user.auth.refreshToken,
     user,
   };
-  console.log('userLogin Data:', data);
+  // alert(`userLogin Data: ${JSON.stringify(data)}`);
   return new Promise((res, rej) => {
     Database.userDB.insert({data}, (err, newDoc) => {
       if (err) rej(err);
@@ -192,12 +196,15 @@ let userLogout = async () => {
   await Database.userDB.remove({}, {multi: true});
 };
 
-let userData = async () => {
-  let data = [];
-  await Database.userDB.find({}, (err, docs) => {
-    data = [...docs];
+let userData = () => {
+  return new Promise(async (res, rej) => {
+    let data = [];
+    await Database.userDB.find({}, (err, docs) => {
+      if (err) rej(err);
+      data = [...docs];
+    });
+    data[0] !== undefined ? res(data[0]) : res(undefined);
   });
-  return data[0] !== undefined ? data[0] : undefined;
 };
 
 let refreshData = () => {

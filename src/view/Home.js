@@ -25,6 +25,7 @@ export default class Homepage extends Component {
   };
   async componentDidMount() {
     await this.fetchData();
+    if (__DEV__) alert('Development Mode');
     WDSTools.EE.on('refreshData', this.fetchData);
   }
   componentWillUnmount() {

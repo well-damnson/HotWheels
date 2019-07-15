@@ -63,6 +63,22 @@ export default class SamplePage extends Component {
           <TouchableOpacity onPress={async () => await DBFunc.refreshData()}>
             <Text>Refresh Data</Text>
           </TouchableOpacity>
+          <Text />
+          <Text />
+          <TouchableOpacity
+            onPress={async () => alert(JSON.stringify(await DBFunc.userData()))}
+          >
+            <Text>User Data</Text>
+          </TouchableOpacity>
+          <Text />
+          <Text />
+          <TouchableOpacity
+            onPress={async () =>
+              alert(JSON.stringify((await DBFunc.userData()).data.accessToken))
+            }
+          >
+            <Text>User AccessToken</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     );

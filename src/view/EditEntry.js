@@ -24,6 +24,7 @@ export default class EditEntry extends Component {
     series: [],
     name: [],
     color: [],
+    _id: this.props.navigation.getParam('_id') || '',
     txtbrand: this.props.navigation.getParam('data').brand || '',
     txtmerk: this.props.navigation.getParam('data').merk || '',
     txttype: this.props.navigation.getParam('data').type || '',
@@ -290,7 +291,7 @@ export default class EditEntry extends Component {
             style={styles.button}
             onPress={async () => {
               this.setState({isSaving: true}, async () => {
-                let data = await DBFunc.addData({
+                let data = await DBFunc.edit(this.state._id, {
                   name: this.state.txtname,
                   brand: this.state.txtbrand,
                   merk: this.state.txtmerk,
@@ -308,7 +309,7 @@ export default class EditEntry extends Component {
                   str += data.color ? data.color[0] + '\n' : '';
                   alert(str);
                 } else {
-                  alert('Data Added');
+                  alert('Data Editted');
                 }
                 this.setState(
                   {
