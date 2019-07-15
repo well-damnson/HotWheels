@@ -71,19 +71,13 @@ export default class Sandboxui extends Component {
         <View style={styles.Cardslave}>
           <View style={styles.flexbutrow}>
             <Text style={styles.defaulter}>Brand:</Text>
-            <Text style={styles.defaulter2}>{item.data.brand}</Text>
-          </View>
-        </View>
-        <View style={styles.Cardslave}>
-          <View style={styles.flexbutrow}>
-            <Text style={styles.defaulter}>Manufacture:</Text>
             <Text style={styles.defaulter2}>{item.data.merk}</Text>
           </View>
         </View>
         <View style={styles.Cardslave}>
           <View style={styles.flexbutrow}>
-            <Text style={styles.defaulter}>Type:</Text>
-            <Text style={styles.defaulter2}>{item.data.type}</Text>
+            <Text style={styles.defaulter}>Tahun:</Text>
+            <Text style={styles.defaulter2}>{item.data.tahun}</Text>
           </View>
         </View>
         <View style={styles.Cardslave}>

@@ -14,12 +14,12 @@ export default class Homepage extends Component {
     isSearching: false,
     Brand: undefined,
     Manufacture: undefined,
-    Type: undefined,
+    Tahun: undefined,
     Series: undefined,
     Data: {
       brand: [],
       merk: [],
-      type: [],
+      tahun: [],
       series: [],
     },
   };
@@ -48,33 +48,10 @@ export default class Homepage extends Component {
           <View style={{flex: 1}} />
         </View>
         <View style={styles.LowerBracket}>
-          {/* start Brand */}
-          <View style={styles.flexbutrow}>
-            <View style={styles.thespacer}>
-              <Text style={styles.defaulter}>Brand </Text>
-              <Text style={styles.defaulter}>:</Text>
-            </View>
-            <View style={styles.pickapsulated}>
-              <Picker
-                selectedValue={this.state.Brand}
-                style={styles.picker}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.setState({Brand: itemValue})
-                }
-              >
-                <Picker.Item label="All" value={undefined} />
-                {this.state.Data &&
-                  this.state.Data.brand &&
-                  this.state.Data.brand.map((val, index) => {
-                    return <Picker.Item label={val} value={val} key={index} />;
-                  })}
-              </Picker>
-            </View>
-          </View>
           {/* start Manufacture */}
           <View style={styles.flexbutrow}>
             <View style={styles.thespacer}>
-              <Text style={styles.defaulter}>Manufacture </Text>
+              <Text style={styles.defaulter}>Brand </Text>
               <Text style={styles.defaulter}>:</Text>
             </View>
             <View style={styles.pickapsulated}>
@@ -94,24 +71,24 @@ export default class Homepage extends Component {
               </Picker>
             </View>
           </View>
-          {/* start Type */}
+          {/* start Tahun */}
           <View style={styles.flexbutrow}>
             <View style={styles.thespacer}>
-              <Text style={styles.defaulter}>Type </Text>
+              <Text style={styles.defaulter}>Tahun </Text>
               <Text style={styles.defaulter}>:</Text>
             </View>
             <View style={styles.pickapsulated}>
               <Picker
-                selectedValue={this.state.Type}
+                selectedValue={this.state.Tahun}
                 style={styles.picker}
                 onValueChange={(itemValue, itemIndex) =>
-                  this.setState({Type: itemValue})
+                  this.setState({Tahun: itemValue})
                 }
               >
                 <Picker.Item label="All" value={undefined} />
                 {this.state.Data &&
-                  this.state.Data.type &&
-                  this.state.Data.type.map((val, index) => {
+                  this.state.Data.tahun &&
+                  this.state.Data.tahun.map((val, index) => {
                     return <Picker.Item label={val} value={val} key={index} />;
                   })}
               </Picker>
@@ -150,7 +127,7 @@ export default class Homepage extends Component {
                 let filter = [
                   {by: 'merk', value: this.state.Manufacture},
                   {by: 'brand', value: this.state.Brand},
-                  {by: 'type', value: this.state.Type},
+                  {by: 'tahun', value: this.state.Tahun},
                   {by: 'series', value: this.state.Series},
                 ];
                 let data = await DBFunc.find({filter});
@@ -179,7 +156,7 @@ export default class Homepage extends Component {
                 this.setState({
                   Brand: undefined,
                   Manufacture: undefined,
-                  Type: undefined,
+                  Tahun: undefined,
                   Series: undefined,
                 });
                 // this.props.navigation.navigate('SamplePage');

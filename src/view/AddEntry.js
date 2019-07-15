@@ -20,13 +20,13 @@ export default class AddEntry extends Component {
     isModalListVisible: false,
     brand: [],
     merk: [],
-    type: [],
+    tahun: [],
     series: [],
     name: [],
     color: [],
     txtbrand: '',
     txtmerk: '',
-    txttype: '',
+    txttahun: '',
     txtseries: '',
     txtname: '',
     txtcolor: '',
@@ -98,7 +98,7 @@ export default class AddEntry extends Component {
                     this.setState({
                       txtbrand: '',
                       txtmerk: '',
-                      txttype: '',
+                      txttahun: '',
                       txtseries: '',
                       txtname: '',
                       txtcolor: '',
@@ -187,26 +187,6 @@ export default class AddEntry extends Component {
             <Text style={styles.defaulter}>Brand:</Text>
             <TextInput
               style={styles.texin}
-              placeholder="ex: HotWheels, Mattel, etc."
-              onChangeText={(txtbrand) => this.setState({txtbrand})}
-              value={this.state.txtbrand}
-            />
-            <View style={{flex: 0.2}} />
-            <TouchableOpacity
-              style={styles.button2}
-              onPress={() => {
-                this.toggleModalList('brand');
-              }}
-            >
-              <Ionicons name={'md-search'} size={15} color="blue" />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={styles.incontain}>
-          <View style={styles.flexbutrow}>
-            <Text style={styles.defaulter}>Manufacture:</Text>
-            <TextInput
-              style={styles.texin}
               placeholder="ex: BMW, Honda, etc."
               onChangeText={(txtmerk) => this.setState({txtmerk})}
               value={this.state.txtmerk}
@@ -224,18 +204,18 @@ export default class AddEntry extends Component {
         </View>
         <View style={styles.incontain}>
           <View style={styles.flexbutrow}>
-            <Text style={styles.defaulter}>Type:</Text>
+            <Text style={styles.defaulter}>Tahun:</Text>
             <TextInput
               style={styles.texin}
               placeholder="ex: Car, Planes, Trucks,etc"
-              onChangeText={(txttype) => this.setState({txttype})}
-              value={this.state.txttype}
+              onChangeText={(txttahun) => this.setState({txttahun})}
+              value={this.state.txttahun}
             />
             <View style={{flex: 0.2}} />
             <TouchableOpacity
               style={styles.button2}
               onPress={() => {
-                this.toggleModalList('type');
+                this.toggleModalList('tahun');
               }}
             >
               <Ionicons name={'md-search'} size={15} color="blue" />
@@ -304,7 +284,7 @@ export default class AddEntry extends Component {
                   name: this.state.txtname,
                   brand: this.state.txtbrand,
                   merk: this.state.txtmerk,
-                  type: this.state.txttype,
+                  tahun: this.state.txttahun,
                   series: this.state.txtseries,
                   color: this.state.txtcolor,
                   notes: this.state.txtnotes,
@@ -314,7 +294,7 @@ export default class AddEntry extends Component {
                   str += data.name ? 'Name' + ' cannot be blank\n' : '';
                   str += data.brand ? 'Brand' + ' cannot be blank\n' : '';
                   str += data.merk ? 'Manufacture' + ' cannot be blank\n' : '';
-                  str += data.type ? 'Type' + ' cannot be blank\n' : '';
+                  str += data.tahun ? 'Tahun' + ' cannot be blank\n' : '';
                   str += data.color ? 'Color' + ' cannot be blank\n' : '';
                   alert(str);
                 } else {
@@ -324,7 +304,7 @@ export default class AddEntry extends Component {
                   isSaving: false,
                   txtbrand: '',
                   txtmerk: '',
-                  txttype: '',
+                  txttahun: '',
                   txtseries: '',
                   txtname: '',
                   txtcolor: '',

@@ -20,14 +20,14 @@ export default class EditEntry extends Component {
     isModalListVisible: false,
     brand: [],
     merk: [],
-    type: [],
+    tahun: [],
     series: [],
     name: [],
     color: [],
     _id: this.props.navigation.getParam('_id') || '',
     txtbrand: this.props.navigation.getParam('data').brand || '',
     txtmerk: this.props.navigation.getParam('data').merk || '',
-    txttype: this.props.navigation.getParam('data').type || '',
+    txttahun: this.props.navigation.getParam('data').tahun || '',
     txtseries: this.props.navigation.getParam('data').series || '',
     txtname: this.props.navigation.getParam('data').name || '',
     txtcolor: this.props.navigation.getParam('data').color || '',
@@ -90,7 +90,7 @@ export default class EditEntry extends Component {
                     this.setState({
                       txtbrand: '',
                       txtmerk: '',
-                      txttype: '',
+                      txttahun: '',
                       txtseries: '',
                       txtname: '',
                       txtcolor: '',
@@ -179,26 +179,6 @@ export default class EditEntry extends Component {
             <Text style={styles.defaulter}>Brand:</Text>
             <TextInput
               style={styles.texin}
-              placeholder="ex: HotWheels, Mattel, etc."
-              onChangeText={(txtbrand) => this.setState({txtbrand})}
-              value={this.state.txtbrand}
-            />
-            <View style={{flex: 0.2}} />
-            <TouchableOpacity
-              style={styles.button2}
-              onPress={() => {
-                this.toggleModalList('brand');
-              }}
-            >
-              <Ionicons name={'md-search'} size={15} color="blue" />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={styles.incontain}>
-          <View style={styles.flexbutrow}>
-            <Text style={styles.defaulter}>Manufacture:</Text>
-            <TextInput
-              style={styles.texin}
               placeholder="ex: BMW, Honda, etc."
               onChangeText={(txtmerk) => this.setState({txtmerk})}
               value={this.state.txtmerk}
@@ -216,18 +196,18 @@ export default class EditEntry extends Component {
         </View>
         <View style={styles.incontain}>
           <View style={styles.flexbutrow}>
-            <Text style={styles.defaulter}>Type:</Text>
+            <Text style={styles.defaulter}>Tahun:</Text>
             <TextInput
               style={styles.texin}
-              placeholder="ex: Car, Planes, Trucks,etc"
-              onChangeText={(txttype) => this.setState({txttype})}
-              value={this.state.txttype}
+              placeholder="ex: 2019,1969,etc"
+              onChangeText={(txttahun) => this.setState({txttahun})}
+              value={this.state.txttahun}
             />
             <View style={{flex: 0.2}} />
             <TouchableOpacity
               style={styles.button2}
               onPress={() => {
-                this.toggleModalList('type');
+                this.toggleModalList('tahun');
               }}
             >
               <Ionicons name={'md-search'} size={15} color="blue" />
@@ -295,7 +275,7 @@ export default class EditEntry extends Component {
                   name: this.state.txtname,
                   brand: this.state.txtbrand,
                   merk: this.state.txtmerk,
-                  type: this.state.txttype,
+                  tahun: this.state.txttahun,
                   series: this.state.txtseries,
                   color: this.state.txtcolor,
                   notes: this.state.txtnotes,
@@ -305,7 +285,7 @@ export default class EditEntry extends Component {
                   str += data.brand ? data.brand[0] + '\n' : '';
                   str += data.name ? data.name[0] + '\n' : '';
                   str += data.merk ? data.merk[0] + '\n' : '';
-                  str += data.type ? data.type[0] + '\n' : '';
+                  str += data.tahun ? data.tahun[0] + '\n' : '';
                   str += data.color ? data.color[0] + '\n' : '';
                   alert(str);
                 } else {
@@ -316,7 +296,7 @@ export default class EditEntry extends Component {
                     isSaving: false,
                     txtbrand: '',
                     txtmerk: '',
-                    txttype: '',
+                    txttahun: '',
                     txtseries: '',
                     txtname: '',
                     txtcolor: '',
