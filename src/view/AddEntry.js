@@ -78,7 +78,16 @@ export default class AddEntry extends Component {
             <View style={{flex: 2}} />
             <View style={styles.ModalSlave}>
               <View style={{flex: 1}} />
-              <Text style={{flex: 1, fontSize: 15, color: Color.shadow}}>
+              <Text
+                style={{
+                  flex: 1,
+                  fontSize: 12,
+                  color: Color.shadow,
+                  padding: 2,
+                  alignSelf: 'center',
+                  flexBasis: 20,
+                }}
+              >
                 Are You Sure You Want to Cancel This?
               </Text>
               <View style={{flex: 1}} />
