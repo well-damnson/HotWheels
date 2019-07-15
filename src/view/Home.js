@@ -71,6 +71,30 @@ export default class Homepage extends Component {
               </Picker>
             </View>
           </View>
+          {/* start Manufacture */}
+          <View style={styles.flexbutrow}>
+            <View style={styles.thespacer}>
+              <Text style={styles.defaulter}>Name </Text>
+              <Text style={styles.defaulter}>:</Text>
+            </View>
+            <View style={styles.pickapsulated}>
+              <Picker
+                selectedValue={this.state.Manufacture}
+                style={styles.picker}
+                onValueChange={(itemValue, itemIndex) =>
+                  this.setState({Manufacture: itemValue})
+                }
+              >
+                <Picker.Item label="All" value={undefined} />
+                {this.state.Data &&
+                  this.state.Data.name &&
+                  this.state.Data.name.map((val, index) => {
+                    return <Picker.Item label={val} value={val} key={index} />;
+                  })}
+              </Picker>
+            </View>
+          </View>
+          {/* start Tahun */}
           {/* start Tahun */}
           <View style={styles.flexbutrow}>
             <View style={styles.thespacer}>
