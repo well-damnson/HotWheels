@@ -87,16 +87,7 @@ export default class EditEntry extends Component {
                 <View style={{flex: 1}} />
                 <TouchableOpacity
                   onPress={() => {
-                    this.setState({
-                      txtbrand: '',
-                      txtmerk: '',
-                      txttahun: '',
-                      txtseries: '',
-                      txtname: '',
-                      txtcolor: '',
-                      txtnotes: '',
-                    });
-                    this.toggleModalConfirm();
+                    this.props.navigation.goBack();
                   }}
                   style={styles.button}
                 >
@@ -318,7 +309,7 @@ export default class EditEntry extends Component {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              this.props.navigation.goBack();
+              this.toggleModalConfirm();
             }}
           >
             <Ionicons name={'md-close-circle-outline'} size={15} color="tomato">
