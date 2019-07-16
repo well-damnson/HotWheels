@@ -1,11 +1,4 @@
 let itemConstraint = {
-  brand: {
-    presence: true,
-    length: {
-      minimum: 1,
-      message: 'Brand cannot be blank',
-    },
-  },
   merk: {
     presence: true,
     length: {
@@ -13,13 +6,7 @@ let itemConstraint = {
       message: 'Manufacture cannot be blank',
     },
   },
-  type: {
-    presence: true,
-    length: {
-      minimum: 1,
-      message: 'Type cannot be blank',
-    },
-  },
+  tahun: {presence: true, numericality: true},
   series: {},
   name: {
     presence: true,
@@ -37,7 +24,7 @@ let itemConstraint = {
   },
   notes: {},
 };
-let _itemColumn = ['brand', 'merk', 'type', 'series', 'name', 'color', 'notes'];
+let _itemColumn = ['merk', 'tahun', 'series', 'name', 'color', 'notes'];
 let searchItemConstraint = {
   sort: {},
   'sort.by': {inclusion: _itemColumn},

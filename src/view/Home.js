@@ -39,6 +39,21 @@ export default class Homepage extends Component {
     this.setState({Data});
   };
 
+  _fetchName = async () => {
+    let filter = [];
+    if (this.state.Manufacture) {
+      filter.push({by: 'merk', value: this.state.Manufacture});
+    }
+    if (this.state.Tahun) {
+      filter.push({by: 'tahun', value: this.state.Tahun});
+    }
+    if (this.state.Series) {
+      filter.push({by: 'series', value: this.state.Series});
+    }
+    let name = await DBFunc.filterName({filter});
+    this.setState({Data: {...this.state.Data, name}});
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -60,14 +75,66 @@ export default class Homepage extends Component {
               <Picker
                 selectedValue={this.state.Manufacture}
                 style={styles.picker}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.setState({Manufacture: itemValue})
-                }
+                onValueChange={(itemValue, itemIndex) => {
+                  this.setState({Manufacture: itemValue}, async () => {
+                    await this._fetchName();
+                  });
+                }}
               >
                 <Picker.Item label="All" value={undefined} />
                 {this.state.Data &&
                   this.state.Data.merk &&
                   this.state.Data.merk.map((val, index) => {
+                    return <Picker.Item label={val} value={val} key={index} />;
+                  })}
+              </Picker>
+            </View>
+          </View>
+          {/* start Tahun */}
+          <View style={styles.flexbutrow}>
+            <View style={styles.thespacer}>
+              <Text style={styles.defaulter}>Year </Text>
+              <Text style={styles.defaulter}>:</Text>
+            </View>
+            <View style={styles.pickapsulated}>
+              <Picker
+                selectedValue={this.state.Tahun}
+                style={styles.picker}
+                onValueChange={(itemValue, itemIndex) =>
+                  this.setState({Tahun: itemValue}, async () => {
+                    await this._fetchName();
+                  })
+                }
+              >
+                <Picker.Item label="All" value={undefined} />
+                {this.state.Data &&
+                  this.state.Data.tahun &&
+                  this.state.Data.tahun.map((val, index) => {
+                    return <Picker.Item label={val} value={val} key={index} />;
+                  })}
+              </Picker>
+            </View>
+          </View>
+          {/* start Series */}
+          <View style={styles.flexbutrow}>
+            <View style={styles.thespacer}>
+              <Text style={styles.defaulter}>Series </Text>
+              <Text style={styles.defaulter}>:</Text>
+            </View>
+            <View style={styles.pickapsulated}>
+              <Picker
+                selectedValue={this.state.Series}
+                style={styles.picker}
+                onValueChange={(itemValue, itemIndex) =>
+                  this.setState({Series: itemValue}, async () => {
+                    await this._fetchName();
+                  })
+                }
+              >
+                <Picker.Item label="All" value={undefined} />
+                {this.state.Data &&
+                  this.state.Data.series &&
+                  this.state.Data.series.map((val, index) => {
                     return <Picker.Item label={val} value={val} key={index} />;
                   })}
               </Picker>
@@ -91,52 +158,6 @@ export default class Homepage extends Component {
                 {this.state.Data &&
                   this.state.Data.name &&
                   this.state.Data.name.map((val, index) => {
-                    return <Picker.Item label={val} value={val} key={index} />;
-                  })}
-              </Picker>
-            </View>
-          </View>
-          {/* start Tahun */}
-          <View style={styles.flexbutrow}>
-            <View style={styles.thespacer}>
-              <Text style={styles.defaulter}>Year </Text>
-              <Text style={styles.defaulter}>:</Text>
-            </View>
-            <View style={styles.pickapsulated}>
-              <Picker
-                selectedValue={this.state.Tahun}
-                style={styles.picker}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.setState({Tahun: itemValue})
-                }
-              >
-                <Picker.Item label="All" value={undefined} />
-                {this.state.Data &&
-                  this.state.Data.tahun &&
-                  this.state.Data.tahun.map((val, index) => {
-                    return <Picker.Item label={val} value={val} key={index} />;
-                  })}
-              </Picker>
-            </View>
-          </View>
-          {/* start Series */}
-          <View style={styles.flexbutrow}>
-            <View style={styles.thespacer}>
-              <Text style={styles.defaulter}>Series </Text>
-              <Text style={styles.defaulter}>:</Text>
-            </View>
-            <View style={styles.pickapsulated}>
-              <Picker
-                selectedValue={this.state.Series}
-                style={styles.picker}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.setState({Series: itemValue})
-                }
-              >
-                <Picker.Item label="All" value={undefined} />
-                {this.state.Data &&
-                  this.state.Data.series &&
-                  this.state.Data.series.map((val, index) => {
                     return <Picker.Item label={val} value={val} key={index} />;
                   })}
               </Picker>

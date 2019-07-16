@@ -3,7 +3,7 @@ import {validate} from 'validate.js';
 import Constraint from '../config/Constraint';
 
 /*
- * obj = {brand, merk, type, series, name, color, notes}
+ * obj = {merk, tahun, series, name, color, notes}
  */
 let addData = async (obj) => {
   // console.log(obj);
@@ -14,12 +14,11 @@ let addData = async (obj) => {
     return validation;
   }
 
-  let {brand, merk, type, series, name, color, notes} = obj;
+  let {merk, tahun, series, name, color, notes} = obj;
   let now = Date.now();
   let data = {
-    brand,
     merk,
-    type,
+    tahun,
     series,
     name,
     color,
@@ -46,7 +45,7 @@ let _f = () => {
   });
 };
 /*
- * obj = {filter: [{by: ['brand', 'merk', 'type', 'series', 'name', 'color', 'notes'], value: string}]}
+ * obj = {filter: [{by: ['merk', 'tahun', 'series', 'name', 'color', 'notes'], value: string}]}
  */
 let find = async (obj = {}) => {
   let validation = validate(obj, Constraint.searchItemConstraint);
@@ -95,11 +94,10 @@ let _filter = (data, filter) => {
   return filteredData;
 };
 
-let filterList = async () => {
+let filterList = async (def = {}) => {
   let columnList = {
-    brand: [],
     merk: [],
-    type: [],
+    tahun: [],
     series: [],
     name: [],
     color: [],
@@ -107,35 +105,46 @@ let filterList = async () => {
 
   let docs = await _f();
   for (let i = 0; i < docs.length; i++) {
-    if (!columnList.brand.includes(docs[i].data.brand)) {
-      columnList.brand.push(docs[i].data.brand);
-    }
-    if (!columnList.merk.includes(docs[i].data.merk)) {
+    if (docs[i].data.merk && !columnList.merk.includes(docs[i].data.merk)) {
       columnList.merk.push(docs[i].data.merk);
     }
-    if (!columnList.type.includes(docs[i].data.type)) {
-      columnList.type.push(docs[i].data.type);
+    if (docs[i].data.tahun && !columnList.tahun.includes(docs[i].data.tahun)) {
+      columnList.tahun.push(docs[i].data.tahun);
     }
-    if (!columnList.series.includes(docs[i].data.series)) {
+    if (
+      docs[i].data.series &&
+      !columnList.series.includes(docs[i].data.series)
+    ) {
       columnList.series.push(docs[i].data.series);
     }
-    if (!columnList.name.includes(docs[i].data.name)) {
+    if (docs[i].data.name && !columnList.name.includes(docs[i].data.name)) {
       columnList.name.push(docs[i].data.name);
     }
-    if (!columnList.color.includes(docs[i].data.color)) {
+    if (docs[i].data.color && !columnList.color.includes(docs[i].data.color)) {
       columnList.color.push(docs[i].data.color);
     }
   }
   columnList = {
-    brand: columnList.brand.sort(),
     merk: columnList.merk.sort(),
-    type: columnList.type.sort(),
+    tahun: columnList.tahun.sort(),
     series: columnList.series.sort(),
     name: columnList.name.sort(),
     color: columnList.color.sort(),
   };
 
   return columnList;
+};
+
+let filterName = async (obj) => {
+  let data = await find(obj);
+  let name = [];
+  for (let i = 0; i < data.length; i++) {
+    if (data[i].data.name && !name.includes(data[i].data.name)) {
+      name.push(data[i].data.name);
+    }
+  }
+
+  return name;
 };
 
 let edit = async (_id, newData) => {
@@ -221,4 +230,5 @@ export default {
   userLogout,
   userData,
   refreshData,
+  filterName,
 };

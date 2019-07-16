@@ -1,6 +1,6 @@
 let Constant = {
   debug: true,
-  column: ['brand', 'merk', 'type', 'series', 'name', 'color', 'notes'],
+  column: ['brand', 'series', 'name', 'color', 'notes'],
   googleSignIn: {
     scopes: ['profile', 'email', 'https://www.googleapis.com/auth/drive.file'],
     clientId:

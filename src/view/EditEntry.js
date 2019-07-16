@@ -193,6 +193,7 @@ export default class EditEntry extends Component {
               placeholder="ex: 2019,1969,etc"
               onChangeText={(txttahun) => this.setState({txttahun})}
               value={this.state.txttahun}
+              keyboardType={'numeric'}
             />
             <View style={{flex: 0.2}} />
             <TouchableOpacity
