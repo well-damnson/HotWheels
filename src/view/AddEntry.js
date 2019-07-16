@@ -204,7 +204,7 @@ export default class AddEntry extends Component {
         </View>
         <View style={styles.incontain}>
           <View style={styles.flexbutrow}>
-            <Text style={styles.defaulter}>Tahun:</Text>
+            <Text style={styles.defaulter}>Year:</Text>
             <TextInput
               style={styles.texin}
               placeholder="ex: 2019,1969,etc"
