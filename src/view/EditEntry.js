@@ -313,7 +313,7 @@ export default class EditEntry extends Component {
               this.toggleModalConfirm();
             }}
           >
-            <Ionicons name={'md-close-circle-outline'} size={15} color="tomato">
+            <Ionicons name={'md-close-circle-outline'} size={15} color="black">
               <Text> Cancel</Text>
             </Ionicons>
           </TouchableOpacity>

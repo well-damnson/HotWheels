@@ -117,7 +117,7 @@ export default class Sandboxui extends Component {
               this.toggleModal(item);
             }}
           >
-            <Ionicons name={'md-close-circle-outline'} size={15} color="tomato">
+            <Ionicons name={'md-close-circle-outline'} size={15} color="black">
               <Text>Delete</Text>
             </Ionicons>
           </TouchableOpacity>
@@ -185,7 +185,7 @@ export default class Sandboxui extends Component {
         <FlatList
           data={this.state.Data}
           renderItem={(item) => (
-            <View style={{backgroundColor: 'grey'}}>
+            <View style={{backgroundColor: Color.shadow}}>
               <View style={{flex: 1}} />
               {this.MyCardView(item)}
               <View style={{flex: 1}} />

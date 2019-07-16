@@ -151,7 +151,7 @@ export default class Profile extends Component {
             }
           }}
         >
-          <Ionicons name={'logo-google'} size={15} color={Color.sub}>
+          <Ionicons name={'logo-google'} size={15} color={'black'}>
             <Text>
               {this.state.validity
                 ? ' Log out from google'
@@ -172,7 +172,7 @@ export default class Profile extends Component {
             await GoogleDriveService.uploadBackup();
           }}
         >
-          <Ionicons name={'ios-arrow-round-up'} size={15} color={Color.sub}>
+          <Ionicons name={'ios-arrow-round-up'} size={15} color={'black'}>
             <Text>{'Upload Data to GDrive'}</Text>
           </Ionicons>
         </TouchableOpacity>
@@ -189,7 +189,7 @@ export default class Profile extends Component {
             await GoogleDriveService.downloadBackup();
           }}
         >
-          <Ionicons name={'ios-arrow-round-down'} size={15} color={Color.sub}>
+          <Ionicons name={'ios-arrow-round-down'} size={15} color={'black'}>
             <Text>{'Download Data from GDrive'}</Text>
           </Ionicons>
         </TouchableOpacity>

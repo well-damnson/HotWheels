@@ -133,7 +133,7 @@ const getTabBarIcon = (navigation, tintColor, focused) => {
     <IconComponent
       name={iconName}
       size={24}
-      color={focused ? Color.accent : Color.sub}
+      color={focused ? Color.option : Color.sub}
     />
   );
 };
@@ -152,7 +152,7 @@ export default createAppContainer(
           getTabBarIcon(navigation, tintColor, focused),
       }),
       tabBarOptions: {
-        activeTintColor: Color.accent,
+        activeTintColor: Color.option,
         inactiveTintColor: Color.sub,
       },
     },
